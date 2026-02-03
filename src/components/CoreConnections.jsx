@@ -89,3 +89,75 @@ const CoreConnections = () => {
 };
 
 export default CoreConnections;
+
+
+// import React, { useState } from 'react';
+// import { Briefcase, Users, Diamond, ArrowUpRight } from 'lucide-react';
+// import './CoreConnections.css';
+
+// const Card = ({ icon: Icon, title, desc, linkText, color, onClick }) => {
+//     const [isHovered, setIsHovered] = useState(false);
+    
+//     return (
+//         <div 
+//             className={`core-card ${isHovered ? 'hovered' : ''}`}
+//             onMouseEnter={() => setIsHovered(true)}
+//             onMouseLeave={() => setIsHovered(false)}
+//             onClick={onClick}
+//             role="button"
+//             tabIndex={0}
+//             onKeyDown={(e) => e.key === 'Enter' && onClick?.()}
+//         >
+//             <div className="icon-container" style={{ backgroundColor: color }}>
+//                 <Icon size={24} className="icon" />
+//             </div>
+//             <h3>{title}</h3>
+//             <p>{desc}</p>
+//             <a 
+//                 className="card-link"
+//                 aria-label={`Learn more about ${title}`}
+//             >
+//                 {linkText} <ArrowUpRight size={16} />
+//             </a>
+//         </div>
+//     );
+// };
+
+// const CoreConnections = () => {
+//     const cards = [
+//         {
+//             icon: Briefcase,
+//             title: "Professional Care",
+//             desc: "Instant, confidential access to campus counselors for professional guidance when you need it.",
+//             linkText: "Learn more",
+//             color: "#FFF0E6"
+//         },
+//         // ... other cards
+//     ];
+    
+//     const handleCardClick = (cardTitle) => {
+//         console.log(`Card clicked: ${cardTitle}`);
+//         // Add navigation logic
+//     };
+    
+//     return (
+//         <section className="core-connections-section">
+//             <div className="section-header">
+//                 <h2>Core Connections</h2>
+//                 <p>Three pillars of support designed to foster growth and positivity.</p>
+//             </div>
+            
+//             <div className="cards-grid">
+//                 {cards.map((card, index) => (
+//                     <Card
+//                         key={index}
+//                         {...card}
+//                         onClick={() => handleCardClick(card.title)}
+//                     />
+//                 ))}
+//             </div>
+//         </section>
+//     );
+// };
+
+// export default CoreConnections;
