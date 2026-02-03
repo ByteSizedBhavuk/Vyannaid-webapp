@@ -1,25 +1,4 @@
-// import React from 'react';
-// import Navbar from './components/Navbar';
-// import Hero from './components/Hero';
-// import CoreConnections from './components/CoreConnections';
-// import GentleInsights from './components/GentleInsights';
-// import CTA from './components/CTA';
-// import Footer from './components/Footer';
 
-// function App() {
-//   return (
-//     <div className="app-container">
-//       <Navbar />
-//       <Hero />
-//       <CoreConnections />
-//       <GentleInsights />
-//       <CTA />
-//       <Footer />
-//     </div>
-//   );
-// }
-
-// export default App;
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
@@ -47,9 +26,21 @@ const Home = () => (
   </>
 );
 
+const HomeRoute = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) return null;
+
+  return isAuthenticated ? (
+    <Navigate to="/dashboard/student" replace />
+  ) : (
+    <Home />
+  );
+};
+
 const RedirectIfLoggedIn = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Navigate to="/dashboard" /> : children;
+  return isAuthenticated ? <Navigate to="/dashboard/student" /> : children;
 };
 
 function App() {
@@ -60,7 +51,7 @@ function App() {
 
         <Routes>
           {/* PUBLIC HOME */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomeRoute />} />
 
           {/* AUTH */}
           <Route

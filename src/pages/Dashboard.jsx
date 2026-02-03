@@ -1,17 +1,3 @@
-// import { useAuth } from "../auth/AuthContext";
-
-// const Dashboard = () => {
-//   const { logout } = useAuth();
-
-//   return (
-//     <>
-//       <h1>User Dashboard</h1>
-//       <button onClick={logout}>Logout</button>
-//     </>
-//   );
-// };
-
-// export default Dashboard;
 
 
 import { useAuth } from "../auth/AuthContext";

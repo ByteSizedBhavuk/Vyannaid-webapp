@@ -24,21 +24,35 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 
-
 Vyannaid-webapp/
 ├─ public/
 │  └─ vite.svg
 ├─ src/
+│  ├─ api/
+│  │  └─ authApi.js
 │  ├─ assets/
 │  │  ├─ hero-image.png
 │  │  └─ react.svg
+│  ├─ auth/
+│  │  ├─ AuthContext.jsx
+│  │  └─ ProtectedRoute.jsx
 │  ├─ components/
+│  │  ├─ CoreConnections.css
 │  │  ├─ CoreConnections.jsx
 │  │  ├─ CTA.jsx
 │  │  ├─ Footer.jsx
 │  │  ├─ GentleInsights.jsx
 │  │  ├─ Hero.jsx
+│  │  ├─ Navbar.css
 │  │  └─ Navbar.jsx
+│  ├─ pages/
+│  │  ├─ Dashboard.css
+│  │  ├─ Dashboard.jsx
+│  │  ├─ Login.css
+│  │  ├─ Login.jsx
+│  │  └─ Register.jsx
+│  ├─ utils/
+│  │  └─ validators.js
 │  ├─ App.css
 │  ├─ App.jsx
 │  ├─ index.css
