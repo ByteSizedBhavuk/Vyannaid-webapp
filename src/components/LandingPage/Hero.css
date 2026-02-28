@@ -1,0 +1,241 @@
+/* Hero Section */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 5%;
+    margin-top: 80px;
+    /* Offset for fixed navbar */
+    background-color: var(--color-bg-cream);
+    gap: 3rem;
+    min-height: calc(100vh - 80px);
+    /* Adjust height for navbar */
+    position: relative;
+}
+
+.hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 600px;
+    padding-top: 2rem;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #F8FAFC;
+    color: var(--color-primary);
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.hero-content h1 {
+    font-size: 4.5rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+}
+
+.highlight {
+    color: var(--color-primary);
+    position: relative;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 0 3rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin-bottom: 4rem;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--color-border);
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    color: var(--color-text-main);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-text-muted);
+}
+
+/* Feature Grid Layout */
+.hero-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background-color: #F8FAFC;
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    text-align: left;
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.feature-icon-wrapper.blue {
+    color: #3B82F6;
+}
+
+.feature-icon-wrapper.green {
+    color: #10B981;
+}
+
+.feature-icon-wrapper.purple {
+    color: #8B5CF6;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Hero Image Layout */
+.hero-image-container {
+    flex: 1.5;
+    /* Increase breadth */
+    display: block;
+    position: relative;
+    border-radius: 64px;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    /* Ensure it stays a landscape rectangle */
+    max-height: 800px;
+    /* Prevent it from getting too tall */
+    transform: translateX(2rem);
+    /* Shift slightly to the right */
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 64px;
+    box-shadow: var(--shadow-lg);
+    background-color: transparent;
+}
+
+.floating-card {
+    position: absolute;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 600;
+}
+
+.floating-card.top-right {
+    top: 10%;
+    right: -20px;
+}
+
+.floating-card.bottom-left {
+    bottom: -20px;
+    left: -40px;
+    z-index: 10;
+}
+
+.card-icon {
+    color: #64748B;
+}
+
+.card-title {
+    margin-bottom: 0.2rem;
+}
+
+.progress-bar {
+    height: 4px;
+    width: 100px;
+    background-color: #F0F0F0;
+    border-radius: 2px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 75%;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+}
+
+.card-subtitle {
+    font-size: 0.65rem;
+    color: #999;
+    margin-top: 0.2rem;
+}
+
+/* Response Design */
+@media (min-width: 992px) {
+    .hero-section {
+        flex-direction: row !important;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+}

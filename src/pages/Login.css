@@ -64,3 +64,36 @@
   font-size: 0.85rem;
   margin-bottom: 1rem;
 }
+
+/* password input with eye toggle */
+.password-input-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.password-input-container input {
+  margin-bottom: 0 !important;
+  padding-right: 2.5rem !important;
+  /* space for the eye icon */
+}
+
+.auth-card button.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.auth-card button.password-toggle:hover {
+  color: #1A2234;
+}

@@ -1,0 +1,337 @@
+/* Analytics.css */
+
+.analytics-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+/* Header */
+.analytics-header {
+    margin-bottom: 0.5rem;
+}
+
+.analytics-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1A2234;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.5px;
+}
+
+.analytics-subtitle {
+    font-size: 0.95rem;
+    color: #94A3B8;
+    margin: 0;
+}
+
+/* Metrics Grid */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .analytics-grid {
+        grid-template-columns: repeat(3, 1fr);
+        /* Expand to 3 cols on desktop */
+    }
+}
+
+.metric-card {
+    background: white;
+    border-radius: 24px;
+    /* Significant rounding to match mockup */
+    padding: 1.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.metric-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94A3B8;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.metric-circle-wrapper {
+    width: 36px;
+    height: 36px;
+}
+
+.metric-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(90deg);
+    /* align starting position */
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.metric-desc {
+    font-size: 0.75rem;
+    color: #64748B;
+    line-height: 1.4;
+}
+
+/* Vital Trends Chart */
+.trends-card {
+    background: white;
+    border-radius: 32px;
+    padding: 2rem;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    margin-top: 1rem;
+}
+
+.trends-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.trends-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1A2234;
+    margin: 0;
+}
+
+.trends-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94A3B8;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.trends-chart-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 120px;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+}
+
+.chart-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.bar-container {
+    width: 8px;
+    /* Thickness of bars */
+    height: 100px;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #E2E8F0;
+    /* Light gray top track */
+}
+
+.bar-fill {
+    width: 100%;
+    background-color: #1A2234;
+    /* Dark navy fill */
+    position: absolute;
+    bottom: 0;
+    border-radius: 10px;
+    /* Soft top cap explicitly required on the inner fill if below 100% */
+}
+
+.chart-day {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94A3B8;
+}
+
+.trends-divider {
+    height: 1px;
+    background-color: #F1F5F9;
+    margin: 1.5rem 0;
+}
+
+.trends-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.state-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94A3B8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.state-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1A2234;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.history-btn {
+    background: #1A2234;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0.65rem 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.history-btn:hover {
+    background: #2D3A54;
+}
+
+/* Deep Dive CTA Configuration (Matches Activities Hero Theme) */
+.deep-dive-card {
+    background-color: #1A2234;
+    background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    border-radius: 32px;
+    padding: 2.5rem 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.deep-dive-content {
+    position: relative;
+    z-index: 2;
+}
+
+.deep-dive-tag {
+    display: inline-block;
+    color: #94A3B8;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+}
+
+.deep-dive-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 2rem 0;
+    line-height: 1.2;
+}
+
+.start-assessment-btn {
+    width: 100%;
+    background: white;
+    color: #1A2234;
+    border: none;
+    border-radius: 16px;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.start-assessment-btn:hover {
+    background: #F8FAFC;
+}
+
+/* Accent overlays */
+.deep-dive-card::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    border: 50px solid rgba(255, 255, 255, 0.02);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* PC Graph Visibility Toggles */
+.pc-view {
+    display: none !important;
+}
+
+/* PC Line Chart Styling */
+.pc-line-chart-container {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.wave-svg {
+    width: 100%;
+    height: 120px;
+    overflow: visible;
+}
+
+.pc-chart-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94A3B8;
+    letter-spacing: 1.5px;
+}
+
+.pc-history-btn {
+    letter-spacing: 2px;
+    padding: 0.65rem 2rem;
+}
+
+/* Desktop Breakpoint Override */
+@media (min-width: 1024px) {
+    .analytics-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mobile-view {
+        display: none !important;
+    }
+
+    .trends-header.pc-view,
+    .trends-footer.pc-view {
+        display: flex !important;
+    }
+
+    .pc-view:not(.trends-header):not(.trends-footer) {
+        display: block !important;
+    }
+}

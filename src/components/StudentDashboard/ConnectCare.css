@@ -1,0 +1,112 @@
+/* ConnectCare.css */
+.connect-care-section {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.connect-care-section .section-title {
+    font-size: 0.75rem;
+    color: #9AA6B2;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.connect-care-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.connect-care-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1A2234;
+    margin: 0 0 1.5rem 0;
+}
+
+.booking-card {
+    background: #FAFAFA;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 1rem;
+}
+
+.booking-card:hover {
+    background: #F4F4F5;
+}
+
+.booking-main {
+    display: flex;
+    align-items: center;
+}
+
+.booking-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #EFF6FF;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.booking-info {
+    flex: 1;
+}
+
+.booking-info h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1A2234;
+    margin: 0 0 0.25rem 0;
+}
+
+.booking-info p {
+    font-size: 0.7rem;
+    color: #94A3B8;
+    margin: 0;
+}
+
+.booking-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5rem;
+}
+
+.therapist-avatars {
+    display: flex;
+}
+
+.avatar-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -8px;
+}
+
+.avatar-img:first-child {
+    margin-left: 0;
+}
+
+.time-pill {
+    background-color: #F8FAFC;
+    color: #475569;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+}

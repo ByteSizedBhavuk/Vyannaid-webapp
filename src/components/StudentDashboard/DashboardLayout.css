@@ -1,0 +1,85 @@
+/* DashboardLayout.css */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #FAFAFA;
+    /* Light gray background from design */
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar-overlay {
+        display: none;
+        /* Disabled sliding sidebar on mobile */
+    }
+
+    .dashboard-main {
+        padding: 1rem 1rem 100px 1rem;
+        /* Added bottom padding to hold persistent bottom nav */
+    }
+
+    .dashboard-content-wrapper {
+        flex-direction: column;
+    }
+}
+
+.dashboard-main {
+    flex: 1;
+    padding: 1.5rem 2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.dashboard-content-wrapper {
+    display: flex;
+    gap: 2rem;
+}
+
+.dashboard-left-column {
+    flex: 1.85;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.dashboard-right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 320px;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-content-wrapper {
+        flex-direction: column;
+    }
+
+    .dashboard-right-column {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .dashboard-main {
+        padding: 1rem;
+        padding-bottom: 80px;
+        /* Space for bottom nav */
+    }
+}

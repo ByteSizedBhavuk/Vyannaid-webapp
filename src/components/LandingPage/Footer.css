@@ -1,0 +1,114 @@
+/* Footer Section */
+.footer-section {
+    padding: 4rem 5% 2rem;
+    background-color: white;
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+.footer-logo-section {
+    max-width: 300px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.logo-icon {
+    width: 24px;
+    height: 24px;
+    background-color: #E2E8F0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-dot {
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.footer-desc {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.footer-links-column h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.footer-link {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: var(--color-primary);
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    background-color: #F8FAFC;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.footer-bottom {
+    border-top: 1px solid #F0F0F0;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-bottom-link {
+    cursor: pointer;
+}
+
+.footer-bottom-link:hover {
+    color: #666;
+}

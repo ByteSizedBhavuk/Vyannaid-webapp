@@ -5,17 +5,25 @@ import { AuthProvider, useAuth } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
 // existing components (homepage)
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import GentleInsights from "./components/GentleInsights";
-import CoreConnections from "./components/CoreConnections";
-import CTA from "./components/CTA";
-import Footer from "./components/Footer";
+import Navbar from "./components/LandingPage/Navbar";
+import LandingLayout from "./components/LandingPage/LandingLayout";
+import Hero from "./components/LandingPage/Hero";
+import GentleInsights from "./components/LandingPage/GentleInsights";
+import CoreConnections from "./components/LandingPage/CoreConnections";
+import CTA from "./components/LandingPage/CTA";
+import Footer from "./components/LandingPage/Footer";
 
 // auth pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Community from "./pages/Community";
+import Appointments from "./pages/Appointments";
+import Activities from "./pages/Activities";
+import Analytics from "./pages/Analytics";
+import { useEffect, useState } from "react";
+
+
 
 const Home = () => (
   <>
@@ -44,35 +52,41 @@ const RedirectIfLoggedIn = ({ children }) => {
 };
 
 function App() {
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    fetch("/api")
+      .then(res => res.json())
+      .then(data => setMsg(data.message))
+      .catch(err => console.error("API error:", err));
+  }, []);
   return (
+
     <AuthProvider>
       <BrowserRouter>
-        <Navbar />
-
         <Routes>
-          {/* PUBLIC HOME */}
-          <Route path="/" element={<HomeRoute />} />
+          {/* PUBLIC PAGES (Wrapped in LandingLayout) */}
+          <Route element={<LandingLayout />}>
+            <Route path="/" element={<HomeRoute />} />
+            <Route
+              path="/login"
+              element={
+                <RedirectIfLoggedIn>
+                  <Login />
+                </RedirectIfLoggedIn>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <RedirectIfLoggedIn>
+                  <Register />
+                </RedirectIfLoggedIn>
+              }
+            />
+          </Route>
 
-          {/* AUTH */}
-          <Route
-            path="/login"
-            element={
-              <RedirectIfLoggedIn>
-                <Login />
-              </RedirectIfLoggedIn>
-            }
-          />
-
-          <Route
-            path="/register"
-            element={
-              <RedirectIfLoggedIn>
-                <Register />
-              </RedirectIfLoggedIn>
-            }
-          />
-
-          {/* PROTECTED */}
+          {/* PROTECTED DASHBOARD (No Landing Navbar/Footer) */}
           <Route
             path="/dashboard/student"
             element={
@@ -82,12 +96,47 @@ function App() {
             }
           />
 
+          <Route
+            path="/dashboard/community"
+            element={
+              <ProtectedRoute>
+                <Community />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard/appointments"
+            element={
+              <ProtectedRoute>
+                <Appointments />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard/activities"
+            element={
+              <ProtectedRoute>
+                <Activities />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-
-        <Footer />
       </BrowserRouter>
     </AuthProvider>
+
   );
 }
 

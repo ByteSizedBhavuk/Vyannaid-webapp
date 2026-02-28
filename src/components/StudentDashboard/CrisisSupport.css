@@ -1,0 +1,39 @@
+.crisis-support-section {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.crisis-support-section .section-title {
+    font-size: 0.75rem;
+    color: #9AA6B2;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.crisis-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.crisis-btn {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    color: #1A1A1A;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.crisis-btn:hover {
+    background: #F9FAFB;
+    border-color: #D1D5DB;
+}

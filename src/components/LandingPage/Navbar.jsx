@@ -62,7 +62,7 @@
 
 
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../../auth/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -76,30 +76,25 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="logo">
-        <div className="logo-dot">
-          <div className="logo-inner-dot"></div>
-        </div>
+      <Link to="/" className="nav-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div className="logo-dot"></div>
         <span>Vyannaid</span>
+      </Link>
+
+      <div className="nav-links">
+        <a href="#" className="nav-link">How it Works</a>
+        <a href="#" className="nav-link">Community</a>
+        <a href="#" className="nav-link">Insights</a>
       </div>
 
-      <div className="desktop-menu">
-        <a href="#">How it Works</a>
-        <a href="#">Community</a>
-        <a href="#">Insights</a>
-      </div>
-
-      <div className="auth-actions">
+      <div className="nav-actions">
         {!isAuthenticated ? (
           <>
-            <Link to="/login">Sign In</Link>
-            <Link to="/register" className="cta-btn">Get Started</Link>
+            <Link to="/login" className="sign-in-btn">Sign In</Link>
+            <Link to="/register" className="get-started-btn">Get Started</Link>
           </>
         ) : (
-          <>
-           
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          </>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
         )}
       </div>
     </nav>

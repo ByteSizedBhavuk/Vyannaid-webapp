@@ -1,0 +1,216 @@
+/* Activities.css */
+.activities-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Base Headings */
+.page-title {
+    font-size: 1.75rem;
+    color: #1A2234;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.section-label {
+    font-size: 0.75rem;
+    color: #94A3B8;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.view-all-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1A2234;
+    text-decoration: none;
+}
+
+/* Practice Hero Card */
+.practice-hero-card {
+    background-color: #1A2234;
+    /* Dark Navy Base */
+    background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.practice-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.practice-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: #E2E8F0;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+}
+
+.practice-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.2;
+}
+
+.practice-desc {
+    font-size: 0.95rem;
+    color: #94A3B8;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+    max-width: 90%;
+}
+
+.start-session-btn {
+    background: white;
+    color: #1A2234;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.start-session-btn:hover {
+    background: #F1F5F9;
+}
+
+/* Sub-card Circle Overlays for Hero */
+.practice-hero-card::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 250px;
+    height: 250px;
+    border: 40px solid rgba(255, 255, 255, 0.02);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.practice-hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    border: 50px solid rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Daily Practices List */
+.practices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.practice-item-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid #F1F5F9;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.practice-item-card:hover {
+    border-color: #CBD5E1;
+}
+
+.practice-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.practice-item-details {
+    flex: 1;
+}
+
+.practice-item-details h4 {
+    font-size: 1rem;
+    color: #1A2234;
+    margin: 0 0 0.2rem 0;
+    font-weight: 600;
+}
+
+.practice-item-details p {
+    font-size: 0.8rem;
+    color: #94A3B8;
+    margin: 0;
+}
+
+.practice-arrow {
+    color: #CBD5E1;
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+/* Assessment Card Styling */
+.assessment-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid #F1F5F9;
+    text-align: center;
+}
+
+.assessment-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1A2234;
+    margin: 0 0 1.25rem 0;
+    line-height: 1.4;
+}
+
+.assessment-action-btn {
+    width: 100%;
+    background: #1A2234;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.assessment-action-btn:hover {
+    background: #2D3A54;
+}

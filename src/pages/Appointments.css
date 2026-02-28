@@ -1,0 +1,291 @@
+/* Appointments.css */
+.appointments-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Common Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.25rem;
+}
+
+.section-label {
+    font-size: 0.75rem;
+    color: #9AA6B2;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.view-all-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4A5568;
+    text-decoration: none;
+}
+
+.view-all-link:hover {
+    color: #1A2234;
+}
+
+/* Primary Booking Card */
+.booking-hero-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid #F1F5F9;
+}
+
+.booking-icon-container {
+    width: 48px;
+    height: 48px;
+    background: #F1F5F9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1A2234;
+    margin-bottom: 1.25rem;
+}
+
+.booking-hero-content h3 {
+    font-size: 1.25rem;
+    color: #1A2234;
+    margin: 0 0 0.5rem 0;
+}
+
+.booking-hero-content p {
+    font-size: 0.9rem;
+    color: #64748B;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+}
+
+.booking-therapists-pill {
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.therapist-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.therapist-avatars img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-right: -8px;
+    position: relative;
+    z-index: 2;
+}
+
+.therapist-avatars img:nth-child(2) {
+    z-index: 1;
+}
+
+.avatar-more {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #4A90E2;
+    /* Brand blue approx */
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    position: relative;
+    z-index: 0;
+}
+
+.booking-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #1A2234;
+}
+
+/* Upcoming Appointments List */
+.appointment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.appointment-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid #F1F5F9;
+}
+
+.provider-info-block {
+    display: flex;
+    gap: 1rem;
+}
+
+.provider-avatar-container {
+    position: relative;
+}
+
+.provider-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background: #94A3B8;
+    /* Default offline */
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.provider-avatar-container .status-dot:not(.offline) {
+    background: #4ADE80;
+    /* Online Green */
+}
+
+.provider-details h4 {
+    font-size: 1rem;
+    color: #1A2234;
+    margin: 0 0 0.25rem 0;
+}
+
+.provider-details p {
+    font-size: 0.85rem;
+    color: #64748B;
+    margin: 0 0 0.75rem 0;
+}
+
+.appointment-tags {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.tag {
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.time-pill {
+    background: #F1F5F9;
+    color: #475569;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+}
+
+.format-tag {
+    color: #1A2234;
+}
+
+.format-tag.chat {
+    color: #64748B;
+}
+
+.more-btn {
+    background: none;
+    border: none;
+    color: #94A3B8;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+}
+
+.more-btn:hover {
+    background: #F1F5F9;
+}
+
+/* Quick Actions Grid */
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.navy-action-btn {
+    background: #1A2234;
+    color: white;
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: left;
+}
+
+.navy-action-btn span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.navy-action-btn:hover {
+    background: #2D3A54;
+}
+
+/* Crisis Support Footer Block */
+.crisis-container {
+    background: #F8FAFC;
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.crisis-trigger-btn {
+    width: 100%;
+    background: white;
+    color: #1A2234;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.crisis-trigger-btn:hover {
+    background: #F1F5F9;
+    border-color: #CBD5E1;
+}

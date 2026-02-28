@@ -1,26 +1,38 @@
 
-
-import { useAuth } from "../auth/AuthContext";
-import "./Dashboard.css";
+import React from 'react';
+import DashboardLayout from '../components/StudentDashboard/DashboardLayout';
+import Vitals from '../components/StudentDashboard/Vitals';
+import AarivBanner from '../components/StudentDashboard/AarivBanner';
+import ConnectCare from '../components/StudentDashboard/ConnectCare';
+import DailyActivities from '../components/StudentDashboard/DailyActivities';
+import Assessments from '../components/StudentDashboard/Assessments';
+import Volunteering from '../components/StudentDashboard/Volunteering';
+import CrisisSupport from '../components/StudentDashboard/CrisisSupport';
+import '../components/StudentDashboard/DashboardLayout.css'; // Ensure main styles are loaded
 
 const Dashboard = () => {
-  const { logout } = useAuth();
-
   return (
-    <div className="dashboard">
-      <h1>Student Dashboard</h1>
-      <p className="welcome">Welcome to your personalized space</p>
+    <DashboardLayout>
+      <div className="dashboard-left-column">
+        {/* Top Row: Vitals */}
+        <Vitals />
 
-      <div className="dashboard-cards">
-        <div className="card">📘 My Courses</div>
-        <div className="card">🧠 Insights</div>
-        <div className="card">🤝 Community</div>
+        {/* Middle Row: AI Banner */}
+        <AarivBanner />
+
+        {/* Bottom Rows: Activities */}
+        <DailyActivities />
+
+        <Assessments />
+        <Volunteering />
       </div>
 
-      <button className="logout-btn" onClick={logout}>
-        Logout
-      </button>
-    </div>
+      {/* Right Column */}
+      <div className="dashboard-right-column">
+        <ConnectCare />
+        <CrisisSupport />
+      </div>
+    </DashboardLayout>
   );
 };
 

@@ -1,0 +1,88 @@
+/* DailyActivities.css */
+.activities-section {
+    width: 100%;
+}
+
+.activities-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.activities-section .section-title {
+    font-size: 0.75rem;
+    color: #9AA6B2;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.activities-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.activity-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.activity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.activity-icon-area {
+    margin-right: 1rem;
+}
+
+.activity-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #F8FAFC;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activity-textual {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.activity-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1E293B;
+    margin: 0 0 0.25rem 0;
+}
+
+.activity-meta {
+    font-size: 0.75rem;
+    color: #94A3B8;
+    margin: 0;
+}
+
+.activity-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .activities-list {
+        grid-template-columns: 1fr;
+    }
+}

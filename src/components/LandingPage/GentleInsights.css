@@ -1,0 +1,139 @@
+/* Gentle Insights Section */
+.gentle-insights-section {
+    padding: 6rem 5%;
+    background-color: var(--color-bg-cream);
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.insights-container {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+}
+
+/* Left Side: Visuals */
+.visuals-container {
+    flex: 1;
+    position: relative;
+}
+
+.visuals-wrapper {
+    background-color: #F8FAFC;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    max-width: 600px;
+    position: relative;
+}
+
+.visuals-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.visual-card {
+    flex: 1;
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.visual-card.highlight {
+    background-color: #F1F5F9;
+}
+
+.visual-icon {
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.visual-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.visual-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+}
+
+.visual-card.highlight .visual-desc {
+    color: #64748B;
+}
+
+/* Right Side: Text */
+.text-container {
+    flex: 1;
+}
+
+.insights-heading {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.insights-description {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+}
+
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.feature-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.feature-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.feature-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.explore-link {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    width: fit-content;
+}
+
+.explore-link:hover {
+    background-color: var(--color-primary-hover);
+    text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .insights-container {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .insights-container>div {
+        width: 100%;
+    }
+}

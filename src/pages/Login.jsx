@@ -80,10 +80,12 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authApi";
 import { useAuth } from "../auth/AuthContext";
 import { validateEmail } from "../utils/validators";
+import { Eye, EyeOff } from "lucide-react";
 import "./Login.css";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -130,13 +132,22 @@ const Login = () => {
           required
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
+        <div className="password-input-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+          />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
 
         <button type="submit">Login</button>
 

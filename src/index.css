@@ -2,20 +2,26 @@
 
 :root {
   --font-main: 'Outfit', sans-serif;
-  
+
   /* Colors */
-  --color-primary: #FF9F1C;
-  --color-primary-hover: #E88E10;
-  --color-bg-cream: #FFFBF2;
-  --color-text-main: #1D1D1F;
-  --color-text-muted: #666666;
+  --color-primary: #1A2234;
+  /* Dark Navy */
+  --color-primary-hover: #2D3A54;
+  /* Lighter Navy */
+  --color-bg-cream: #FAFAFA;
+  /* Dashboard Light Background */
+  --color-text-main: #1A2234;
+  /* Navy Text */
+  --color-text-muted: #9AA6B2;
+  /* Slate/Muted Text */
   --color-white: #FFFFFF;
-  --color-border: #F0F0F0;
-  
+  --color-border: #F1F5F9;
+  /* Light Border */
+
   /* Shadows */
-  --shadow-sm: 0 4px 6px rgba(0,0,0,0.02);
-  --shadow-md: 0 8px 30px rgba(0,0,0,0.04);
-  --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
 
   /* Radius */
   --radius-lg: 24px;
@@ -37,7 +43,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.2;
   font-weight: 600;
   color: var(--color-text-main);

@@ -1,0 +1,80 @@
+/* Core Connections Section */
+.core-connections-section {
+    padding: 6rem 5%;
+    background-color: var(--color-bg-cream);
+}
+
+.core-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.core-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.core-desc {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+
+.core-card {
+    background-color: white;
+    padding: 2.5rem 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    /* Subtle shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+}
+
+.core-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+}
+
+.core-icon-container {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.core-card-title {
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+}
+
+.core-card-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    flex: 1;
+}
+
+.core-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 1.5rem;
+    text-decoration: none;
+}

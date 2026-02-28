@@ -10,7 +10,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsed = JSON.parse(storedUser);
+      setUser(parsed);
+      // restore token for axios interceptor
+      if (parsed.token) localStorage.setItem("token", parsed.token);
     }
     setLoading(false);
   }, []);
@@ -18,11 +21,13 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    if (userData.token) localStorage.setItem("token", userData.token);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   const isAuthenticated = !!user;
