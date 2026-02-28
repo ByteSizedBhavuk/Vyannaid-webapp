@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AarivBanner.css';
 
 const AarivBanner = () => {
+    const navigate = useNavigate();
+
     return (
-        <section className="aariv-banner">
+        <section
+            className="aariv-banner"
+            onClick={() => navigate('/dashboard/chatbot')}
+            style={{ cursor: 'pointer' }}
+        >
             <div className="aariv-content">
                 <div className="aariv-pill">AI COMPANION</div>
                 <h2 className="aariv-title">Talk to Aariv</h2>

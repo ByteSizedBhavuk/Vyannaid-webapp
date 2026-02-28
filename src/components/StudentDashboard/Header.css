@@ -6,12 +6,26 @@
     width: 100%;
 }
 
-.mobile-menu-btn {
-    display: none;
+.settings-btn-mobile {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.desktop-hide {
+    display: none !important;
+}
+
+.vyannaid-mobile-logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1E293B;
+    /* Theme color */
+    margin-right: 12px;
 }
 
 .header-spacer {
@@ -24,7 +38,14 @@
     gap: 1.5rem;
 }
 
-.notification-btn {
+.header-left-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-btn,
+.settings-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -38,18 +59,17 @@
 .user-profile-pill {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    background: white;
-    border: 1px solid #E2E8F0;
-    border-radius: 40px;
-    padding: 0.35rem 1rem 0.35rem 0.35rem;
+    background: transparent;
+    border: none;
+    padding: 0;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .user-profile-pill:hover {
-    background: #F8FAFC;
-    border-color: #CBD5E1;
+    background: transparent;
+    border-color: transparent;
+    opacity: 0.8;
 }
 
 .profile-img {
@@ -60,15 +80,37 @@
     background-color: #FEE2E2;
 }
 
-.profile-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #1A2234;
-}
-
 @media (max-width: 768px) {
-    .mobile-menu-btn {
+    .dashboard-header {
+        justify-content: space-between;
+    }
+
+    .desktop-show {
+        display: none !important;
+    }
+
+    .desktop-hide {
+        display: flex !important;
+    }
+
+    .mobile-hide {
+        display: none !important;
+    }
+
+    .header-spacer {
         display: none;
-        /* Disabled in favor of Bottom Navigation */
+        /* Let flex space-between handle spacing */
+    }
+
+    /* Change padding to make pill just an image on mobile */
+    .user-profile-pill {
+        padding: 0;
+        border: none;
+        background: transparent;
+    }
+
+    .user-profile-pill:hover {
+        background: transparent;
+        border-color: transparent;
     }
 }

@@ -20,7 +20,8 @@ import Dashboard from "./pages/Dashboard";
 import Community from "./pages/Community";
 import Appointments from "./pages/Appointments";
 import Activities from "./pages/Activities";
-import Analytics from "./pages/Analytics";
+import Analytics from "./pages/Analytics"
+import Chatbot from "./pages/Chatbot";
 import { useEffect, useState } from "react";
 
 
@@ -128,6 +129,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard/chatbot"
+            element={
+              <ProtectedRoute>
+                <Chatbot />
               </ProtectedRoute>
             }
           />
