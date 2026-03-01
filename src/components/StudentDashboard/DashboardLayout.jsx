@@ -1,5 +1,46 @@
 
+// import React from 'react';
+// import Sidebar from './Sidebar';
+// import Header from './Header';
+// import ProfileSidebar from './ProfileSidebar';
+// import MobileBottomNav from './MobileBottomNav';
+// import './DashboardLayout.css';
+
+// const DashboardLayout = ({ children }) => {
+//     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+//     const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+
+//     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+//     const closeSidebar = () => setIsSidebarOpen(false);
+
+//     const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
+//     const closeProfile = () => setIsProfileOpen(false);
+
+//     return (
+//         <div className="dashboard-layout">
+//             {/* Overlay for mobile when sidebar is open */}
+//             {isSidebarOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
+
+//             <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+
+//             <ProfileSidebar isOpen={isProfileOpen} onClose={closeProfile} />
+
+//             <main className="dashboard-main">
+//                 <Header toggleSidebar={toggleSidebar} toggleProfile={toggleProfile} />
+//                 <div className="dashboard-content-wrapper">
+//                     {children}
+//                 </div>
+//             </main>
+//             <MobileBottomNav />
+//         </div>
+//     );
+// };
+
+// export default DashboardLayout;
+
+
 import React from 'react';
+import { useAuth } from '../../auth/AuthContext';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import ProfileSidebar from './ProfileSidebar';
@@ -7,31 +48,38 @@ import MobileBottomNav from './MobileBottomNav';
 import './DashboardLayout.css';
 
 const DashboardLayout = ({ children }) => {
+    const { user } = useAuth();
+    const isStudent = user?.role === 'student';
+
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [isProfileOpen, setIsProfileOpen] = React.useState(false);
 
-    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-    const closeSidebar = () => setIsSidebarOpen(false);
-
-    const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
-    const closeProfile = () => setIsProfileOpen(false);
+    const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+    const closeSidebar  = () => setIsSidebarOpen(false);
+    const toggleProfile = () => setIsProfileOpen(prev => !prev);
+    const closeProfile  = () => setIsProfileOpen(false);
 
     return (
         <div className="dashboard-layout">
-            {/* Overlay for mobile when sidebar is open */}
-            {isSidebarOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
-
-            <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+            {/* Sidebar overlay + nav — students only */}
+            {isStudent && isSidebarOpen && (
+                <div className="sidebar-overlay" onClick={closeSidebar} />
+            )}
+            {isStudent && (
+                <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+            )}
 
             <ProfileSidebar isOpen={isProfileOpen} onClose={closeProfile} />
 
-            <main className="dashboard-main">
-                <Header toggleSidebar={toggleSidebar} toggleProfile={toggleProfile} />
+            <main className={`dashboard-main${isStudent ? '' : ' no-sidebar'}`}>
+                <Header toggleSidebar={isStudent ? toggleSidebar : undefined} toggleProfile={toggleProfile} />
                 <div className="dashboard-content-wrapper">
                     {children}
                 </div>
             </main>
-            <MobileBottomNav />
+
+            {/* Mobile bottom nav — students only */}
+            {isStudent && <MobileBottomNav />}
         </div>
     );
 };

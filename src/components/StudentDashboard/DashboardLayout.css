@@ -83,3 +83,9 @@
         /* Space for bottom nav */
     }
 }
+/* Admin and counsellor — no sidebar, content fills full width */
+.dashboard-main.no-sidebar {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 2rem; /* no bottom nav, so no extra space needed */
+}

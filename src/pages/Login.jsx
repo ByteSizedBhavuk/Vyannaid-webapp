@@ -1,80 +1,3 @@
-
-// //login jsx
-// import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { loginUser } from "../api/authApi";
-// import { useAuth } from "../auth/AuthContext";
-// import { validateEmail } from "../utils/validators";
-// import "./Login.css";
-
-// const Login = () => {
-//   const [form, setForm] = useState({ email: "", password: "" });
-//   const [error, setError] = useState("");
-//   const { login, isAuthenticated } = useAuth(); // auth context
-//   const navigate = useNavigate();
-
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setError("");
-
-//   if (!validateEmail(form.email)) return setError("Invalid email");
-//   if (!form.password) return setError("Password is required");
-
-//   try {
-//     const res = await loginUser(form);
-
-//     // Store JWT
-//     login(res.data.token);
-
-//     // ✅ redirect after state update
-//     navigate("/dashboard/student", { replace: true });
-//   } catch (err) {
-//     if (err.response?.data?.message) setError(err.response.data.message);
-//     else setError("Login failed. Try again.");
-//   }
-// };
-
-
-//   return (
-//     <div className="auth-container">
-//       <form className="auth-card" onSubmit={handleSubmit}>
-//         <h2>Welcome Back</h2>
-//         <p className="subtitle">Login to continue your journey</p>
-
-//         {/* Error display */}
-//         {error && <p className="error">{error}</p>}
-
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={form.email}
-//           onChange={(e) => setForm({ ...form, email: e.target.value })}
-//           required
-//         />
-
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={form.password}
-//           onChange={(e) => setForm({ ...form, password: e.target.value })}
-//           required
-//         />
-
-//         <button type="submit">Login</button>
-
-//         <p className="switch">
-//           Don’t have an account?{" "}
-//           <span onClick={() => navigate("/register")}>Register</span>
-//         </p>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authApi";
@@ -83,36 +6,43 @@ import { validateEmail } from "../utils/validators";
 import { Eye, EyeOff } from "lucide-react";
 import "./Login.css";
 
+// Redirect each role to their own dashboard after login
+const ROLE_HOME = {
+  admin:      "/dashboard/admin",
+  counsellor: "/dashboard/counsellor",
+  student:    "/dashboard/student",
+};
+
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError]   = useState("");
+  const [loading, setLoading] = useState(false);
+
   const { login } = useAuth();
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (!validateEmail(form.email)) return setError("Invalid email");
-    if (!form.password) return setError("Password is required");
+    if (!form.password)             return setError("Password is required");
 
+    setLoading(true);
     try {
       const res = await loginUser(form);
+      const { token, user } = res.data;
 
-      // ✅ store auth as OBJECT
-      login({
-        token: res.data.token,
-        email: form.email,
-      });
+      // Store full user object — name, email, role, id and token
+      login({ ...user, token });
 
-      // ✅ single, explicit redirect
-      navigate("/dashboard/student", { replace: true });
-
+      // Redirect based on role
+      navigate(ROLE_HOME[user.role] || "/dashboard/student", { replace: true });
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Login failed. Try again."
-      );
+      setError(err.response?.data?.message || "Login failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,10 +79,12 @@ const Login = () => {
           </button>
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in…" : "Login"}
+        </button>
 
         <p className="switch">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <span onClick={() => navigate("/register")}>Register</span>
         </p>
       </form>
@@ -161,4 +93,3 @@ const Login = () => {
 };
 
 export default Login;
-

@@ -1,0 +1,336 @@
+.ad-page {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 1100px;
+}
+
+.ad-toast {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: #1a2234;
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; } }
+
+/* Header */
+.ad-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.ad-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a2234;
+    margin: 0 0 0.2rem;
+}
+
+.ad-subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.ad-assign-btn {
+    background: #1a2234;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* Stats Row */
+.ad-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.ad-stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+
+.ad-stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a2234;
+    line-height: 1;
+}
+
+.ad-stat-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+}
+
+/* Users Card */
+.ad-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+
+.ad-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.ad-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a2234;
+    margin: 0;
+}
+
+.ad-filter-tabs {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.ad-filter-tab {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    text-transform: capitalize;
+    transition: background 0.15s;
+}
+
+.ad-filter-tab.active,
+.ad-filter-tab:hover {
+    background: #1a2234;
+    color: #fff;
+}
+
+.ad-loading, .ad-empty {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+}
+
+/* Table */
+.ad-table-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid #f1f5f9;
+}
+
+.ad-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.ad-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #f8fafc;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ad-table td {
+    padding: 0.85rem 1rem;
+    color: #374151;
+    border-bottom: 1px solid #f8fafc;
+    vertical-align: middle;
+}
+
+.ad-table tr:last-child td { border-bottom: none; }
+.ad-table tr:hover td { background: #fafbfc; }
+
+.ad-td-name {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-weight: 600;
+    color: #1a2234 !important;
+}
+
+.ad-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #1a2234;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.ad-td-email { color: #64748b !important; font-size: 0.85rem; }
+.ad-td-date  { color: #94a3b8 !important; font-size: 0.83rem; }
+
+.ad-role-badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.ad-role-badge.student    { background: #dcfce7; color: #16a34a; }
+.ad-role-badge.counsellor { background: #dbeafe; color: #1d4ed8; }
+.ad-role-badge.admin      { background: #fef9c3; color: #b45309; }
+
+.ad-role-select {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.85rem;
+    color: #1a2234;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    text-transform: capitalize;
+}
+
+.ad-role-select:focus { border-color: #1a2234; }
+
+.ad-delete-btn {
+    background: none;
+    border: 1px solid #fca5a5;
+    color: #ef4444;
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.ad-delete-btn:hover {
+    background: #fef2f2;
+}
+
+/* Assign Modal */
+.ad-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.ad-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.ad-modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a2234;
+    margin: 0 0 0.5rem;
+}
+
+.ad-modal-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ad-modal-select {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.9rem;
+    color: #1a2234;
+    background: #fff;
+    outline: none;
+    width: 100%;
+}
+
+.ad-modal-select:focus { border-color: #1a2234; }
+
+.ad-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.ad-modal-cancel {
+    flex: 1;
+    background: #f1f5f9;
+    color: #64748b;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ad-modal-confirm {
+    flex: 1;
+    background: #1a2234;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .ad-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .ad-page { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+    .ad-stats-row { grid-template-columns: 1fr 1fr; }
+}

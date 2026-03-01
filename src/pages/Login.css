@@ -97,3 +97,20 @@
 .auth-card button.password-toggle:hover {
   color: #1A2234;
 }
+
+/* Role dropdown — inherits same look as text inputs */
+.auth-card .role-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #1a2234;
+  background: #fff;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+.auth-card .role-select:focus {
+  border-color: #1a2234;
+}

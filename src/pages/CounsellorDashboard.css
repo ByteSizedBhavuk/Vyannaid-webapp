@@ -1,0 +1,335 @@
+.cd-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    max-width: 900px;
+}
+
+.cd-loading {
+    padding: 2rem;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.cd-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+
+/* Profile Card */
+.cd-profile-card {}
+
+.cd-profile-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.cd-avatar img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cd-profile-info {
+    flex: 1;
+}
+
+.cd-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a2234;
+    margin: 0 0 0.2rem;
+}
+
+.cd-email {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0 0 0.4rem;
+}
+
+.cd-role-badge {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.7rem;
+    border-radius: 99px;
+}
+
+.cd-edit-btn {
+    background: #1a2234;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.cd-profile-details p {
+    font-size: 0.9rem;
+    color: #374151;
+    margin: 0.35rem 0;
+}
+
+/* Edit Form */
+.cd-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cd-edit-form label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.cd-edit-form input,
+.cd-edit-form textarea {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    color: #1a2234;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+}
+
+.cd-edit-form input:focus,
+.cd-edit-form textarea:focus {
+    border-color: #1a2234;
+}
+
+.cd-save-btn {
+    align-self: flex-start;
+    background: #1a2234;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.55rem 1.4rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 0.25rem;
+}
+
+.cd-save-msg {
+    font-size: 0.85rem;
+    color: #16a34a;
+    margin: 0;
+}
+
+/* Section Title */
+.cd-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a2234;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.cd-count {
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.15rem 0.55rem;
+    border-radius: 99px;
+}
+
+.cd-empty {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+}
+
+/* Students List */
+.cd-students-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cd-student-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+}
+
+.cd-student-item:hover {
+    background: #f8fafc;
+}
+
+.cd-student-item.active {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+}
+
+.cd-student-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #1a2234;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.cd-student-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cd-student-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1a2234;
+}
+
+.cd-student-email {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cd-view-arrow {
+    color: #94a3b8;
+    font-size: 1.2rem;
+}
+
+/* Student Viewer */
+.cd-viewer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.cd-close-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+}
+
+.cd-stat-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.cd-stat {
+    flex: 1;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cd-stat-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.cd-stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a2234;
+}
+
+.cd-goals-section,
+.cd-journal-section {
+    margin-top: 1rem;
+}
+
+.cd-goals-section h4,
+.cd-journal-section h4 {
+    font-size: 0.85rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.6rem;
+}
+
+.cd-goals-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.cd-goals-list li {
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.cd-goals-list li.completed {
+    color: #94a3b8;
+    text-decoration: line-through;
+}
+
+.cd-journal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cd-journal-entry {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+
+.cd-journal-date {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 0 0 0.3rem;
+}
+
+.cd-journal-text {
+    font-size: 0.9rem;
+    color: #374151;
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .cd-page { padding: 1rem; }
+    .cd-stat-row { flex-direction: column; }
+    .cd-profile-top { flex-wrap: wrap; }
+}
