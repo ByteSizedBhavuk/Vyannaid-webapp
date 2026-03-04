@@ -162,6 +162,8 @@ import Analytics from "./pages/Analytics";
 import Chatbot from "./pages/Chatbot";
 import VolunteerChat from "./pages/VolunteerChat";
 import ControlledRespiration from "./pages/ControlledRespiration";
+import JournalingHome from "./pages/JournalingHome";
+import JournalingEditor from "./pages/JournalingEditor";
 
 const ROLE_HOME = {
   admin: "/dashboard/admin",
@@ -216,6 +218,8 @@ function App() {
           <Route path="/dashboard/chatbot" element={<ProtectedRoute allowedRoles={["student"]}><Chatbot /></ProtectedRoute>} />
           <Route path="/dashboard/volunteer-chat" element={<ProtectedRoute allowedRoles={["student"]}><VolunteerChat /></ProtectedRoute>} />
           <Route path="/dashboard/controlled-respiration" element={<ProtectedRoute allowedRoles={["student"]}><ControlledRespiration /></ProtectedRoute>} />
+          <Route path="/dashboard/journaling" element={<ProtectedRoute allowedRoles={["student"]}><JournalingHome /></ProtectedRoute>} />
+          <Route path="/dashboard/journaling/new" element={<ProtectedRoute allowedRoles={["student"]}><JournalingEditor /></ProtectedRoute>} />
 
           {/* ── Counsellor ── */}
           <Route path="/dashboard/counsellor" element={<ProtectedRoute allowedRoles={["counsellor"]}><CounsellorDashboard /></ProtectedRoute>} />
