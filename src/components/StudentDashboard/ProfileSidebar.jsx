@@ -4,6 +4,14 @@ import { useAuth } from '../../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './ProfileSidebar.css';
 
+const AVATAR_COLORS = [
+  '#1A2234', '#4F46E5', '#0891B2', '#059669',
+  '#D97706', '#DC2626', '#9333EA', '#DB2777',
+];
+
+const getInitials = (name = '') =>
+  name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+
 const ProfileSidebar = ({ isOpen, onClose }) => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
@@ -14,11 +22,19 @@ const ProfileSidebar = ({ isOpen, onClose }) => {
         onClose();
     };
 
+    const goToProfile = () => {
+        navigate('/dashboard/profile');
+        onClose();
+    };
+
     const menuItems = [
-        { icon: User, label: 'Profile', action: () => console.log('Profile clicked') },
-        { icon: Info, label: 'About', action: () => console.log('About clicked') },
-        { icon: HelpCircle, label: 'Help', action: () => console.log('Help clicked') },
+        { icon: User,        label: 'Edit Profile', action: goToProfile },
+        { icon: Info,        label: 'About',        action: () => {} },
+        { icon: HelpCircle,  label: 'Help',         action: () => {} },
     ];
+
+    const avatarColor = user?.avatarColor || AVATAR_COLORS[0];
+    const initials    = getInitials(user?.name);
 
     if (!isOpen) return null;
 
@@ -33,11 +49,13 @@ const ProfileSidebar = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="profile-info">
-                    <div className="profile-avatar-large">
-                        <img src={user?.avatar || "https://i.pravatar.cc/150?img=11"} alt="Profile" />
+                    <div className="profile-avatar-large ps-avatar-initial"
+                        style={{ background: avatarColor }}>
+                        {initials}
                     </div>
-                    <h3>{user?.name || 'User Name'}</h3>
-                    <p>{user?.email || 'user@example.com'}</p>
+                    <h3>{user?.name || 'User'}</h3>
+                    <p>{user?.email || ''}</p>
+                    <span className="ps-role-badge">{user?.role}</span>
                 </div>
 
                 <div className="profile-menu">

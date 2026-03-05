@@ -1,48 +1,74 @@
-/* Header.css */
+/* ================= HEADER LAYOUT ================= */
+
 .dashboard-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    padding: 0.6rem 1rem;
+    min-height: 60px;
 }
+
+/* ================= MOBILE SETTINGS BUTTON ================= */
 
 .settings-btn-mobile {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* ================= VISIBILITY HELPERS ================= */
+
 .desktop-hide {
     display: none !important;
 }
 
+.desktop-show {
+    display: flex;
+}
+
+.mobile-hide {
+    display: flex;
+}
+
+/* ================= MOBILE LOGO ================= */
+
 .vyannaid-mobile-logo {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #1E293B;
-    /* Theme color */
-    margin-right: 12px;
+    margin-right: 10px;
+    white-space: nowrap;
 }
+
+/* ================= FLEX SPACER ================= */
 
 .header-spacer {
     flex: 1;
 }
 
+/* ================= RIGHT ACTIONS ================= */
+
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: flex-end;
+    gap: 1.2rem;
 }
+
+/* ================= LEFT ACTIONS ================= */
 
 .header-left-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.9rem;
 }
+
+/* ================= ICON BUTTONS ================= */
 
 .notification-btn,
 .settings-btn {
@@ -53,36 +79,102 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
 }
 
-/* Custom profile pill style matching design */
+.notification-btn:hover,
+.settings-btn:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+/* ================= PROFILE BUTTON ================= */
+
 .user-profile-pill {
     display: flex;
     align-items: center;
     background: transparent;
     border: none;
-    padding: 0;
+    padding: 2px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
 }
 
-.user-profile-pill:hover {
-    background: transparent;
-    border-color: transparent;
-    opacity: 0.8;
+/* ================= AVATAR ================= */
+
+.profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .4px;
+
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+    transition: all 0.2s ease;
 }
+
+/* Hover animation */
+
+.user-profile-pill:hover .profile-avatar {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Click feedback */
+
+.user-profile-pill:active .profile-avatar {
+    transform: scale(0.95);
+}
+
+/* ================= IMAGE AVATAR ================= */
 
 .profile-img {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #FEE2E2;
+
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+    transition: transform 0.2s ease;
 }
 
+.user-profile-pill:hover .profile-img {
+    transform: scale(1.05);
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width: 1024px) {
+
+    .header-actions {
+        gap: 1rem;
+    }
+
+    .profile-avatar,
+    .profile-img {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+/* ================= MOBILE ================= */
+
 @media (max-width: 768px) {
+
     .dashboard-header {
-        justify-content: space-between;
+        padding: 0.5rem 0.8rem;
     }
 
     .desktop-show {
@@ -99,18 +191,45 @@
 
     .header-spacer {
         display: none;
-        /* Let flex space-between handle spacing */
     }
 
-    /* Change padding to make pill just an image on mobile */
-    .user-profile-pill {
-        padding: 0;
-        border: none;
-        background: transparent;
+    .header-actions {
+        gap: 0.8rem;
     }
 
-    .user-profile-pill:hover {
-        background: transparent;
-        border-color: transparent;
+    .notification-btn,
+    .settings-btn {
+        padding: 5px;
+    }
+
+    .profile-avatar,
+    .profile-img {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .vyannaid-mobile-logo {
+        font-size: 1.05rem;
+    }
+}
+
+/* ================= SMALL MOBILE ================= */
+
+@media (max-width: 480px) {
+
+    .dashboard-header {
+        padding: 0.45rem 0.6rem;
+    }
+
+    .header-actions {
+        gap: 0.6rem;
+    }
+
+    .profile-avatar,
+    .profile-img {
+        width: 30px;
+        height: 30px;
+        font-size: 11px;
     }
 }

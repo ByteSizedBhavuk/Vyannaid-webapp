@@ -7,6 +7,18 @@ const Header = ({ toggleSidebar, toggleProfile }) => {
     const { user } = useAuth();
     const userName = user?.name || 'Alex Chen'; // Fallback to 'Alex Chen'
 
+
+const getInitials = (name = "") =>
+  name
+    .trim()
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+
+
     return (
         <header className="dashboard-header">
             {/* Mobile: Settings and Notifications on the left */}
@@ -35,7 +47,12 @@ const Header = ({ toggleSidebar, toggleProfile }) => {
                 </div>
 
                 <button className="user-profile-pill" onClick={toggleProfile}>
-                    <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="profile-img" />
+                    <div
+                        className="profile-avatar"
+                        style={{ background: user?.avatarColor || "#4F46E5" }}
+                    >
+                         {getInitials(user?.name)}
+                    </div>
                 </button>
             </div>
         </header>

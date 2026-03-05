@@ -1,0 +1,417 @@
+
+/* ProfilePage.css — Professional typography + responsive layout */
+
+.pp-loading{
+    padding:4rem;
+    text-align:center;
+    color:#94A3B8;
+    font-size:1rem;
+}
+
+/* PAGE WRAPPER */
+
+.pp-page{
+    width:100%;
+    max-width:720px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+    padding-bottom:5rem;
+}
+
+/* HEADER */
+
+.pp-header{
+    display:flex;
+    flex-direction:column;
+    gap:.55rem;
+}
+
+.pp-back{
+    display:inline-flex;
+    align-items:center;
+    gap:.35rem;
+    background:none;
+    border:none;
+    color:#94A3B8;
+    font-size:.9rem;
+    font-weight:600;
+    cursor:pointer;
+    padding:0;
+    transition:color .15s;
+}
+.pp-back:hover{
+    color:#1A2234;
+}
+
+.pp-title{
+    font-size:1.8rem;
+    font-weight:800;
+    color:#1A2234;
+    margin:0;
+    letter-spacing:-0.4px;
+}
+
+.pp-subtitle{
+    font-size:1rem;
+    color:#94A3B8;
+}
+
+/* TOAST */
+
+.pp-toast{
+    position:fixed;
+    bottom:4rem;
+    left:50%;
+    transform:translateX(-50%);
+    background:#1A2234;
+    color:white;
+    padding:.7rem 1.3rem;
+    border-radius:999px;
+    font-size:.9rem;
+    font-weight:600;
+    box-shadow:0 4px 20px rgba(0,0,0,0.18);
+    z-index:9999;
+}
+
+.pp-toast-error{
+    background:#DC2626;
+}
+
+/* NUDGE */
+
+.pp-nudge{
+    background:#EFF6FF;
+    border:1px solid #BFDBFE;
+    border-radius:14px;
+    padding:.9rem 1rem;
+    font-size:.92rem;
+    color:#1D4ED8;
+    display:flex;
+    gap:.5rem;
+    align-items:flex-start;
+    line-height:1.5;
+}
+
+/* CARD */
+
+.pp-card{
+    background:white;
+    border-radius:24px;
+    padding:1.7rem;
+    box-shadow:0 4px 18px rgba(0,0,0,0.03);
+}
+
+/* AVATAR */
+
+.pp-avatar{
+    width:74px;
+    height:74px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.45rem;
+    font-weight:800;
+    color:white;
+    letter-spacing:-.5px;
+}
+
+/* VIEW MODE */
+
+.pp-view-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:1rem;
+}
+
+.pp-name{
+    font-size:1.45rem;
+    font-weight:700;
+    color:#1A2234;
+}
+
+.pp-email{
+    font-size:.95rem;
+    color:#94A3B8;
+}
+
+.pp-role-badge{
+    background:#F1F5F9;
+    color:#475569;
+    font-size:.75rem;
+    font-weight:700;
+    text-transform:uppercase;
+    padding:.25rem .7rem;
+    border-radius:999px;
+}
+
+.pp-bio{
+    font-size:.95rem;
+    color:#64748B;
+    font-style:italic;
+    margin-top:.6rem;
+    line-height:1.6;
+}
+
+/* CHIPS */
+
+.pp-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.4rem;
+    margin-top:.5rem;
+}
+
+.pp-chip{
+    font-size:.85rem;
+    font-weight:600;
+    padding:.28rem .65rem;
+    border-radius:999px;
+    background:#F8FAFC;
+    border:1px solid #E2E8F0;
+}
+
+.pp-chip-blue{
+    background:#EFF6FF;
+    color:#1D4ED8;
+}
+
+.pp-chip-year{
+    background:#F0FDF4;
+    color:#166534;
+}
+
+/* INFO ROWS */
+
+.pp-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:.85rem 0;
+    font-size:.96rem;
+}
+
+.pp-row-label{
+    color:#94A3B8;
+    font-weight:500;
+}
+
+.pp-row-value{
+    color:#1A2234;
+    font-weight:600;
+}
+
+.pp-row-divider{
+    height:1px;
+    background:#F1F5F9;
+}
+
+/* EDIT BUTTON */
+
+.pp-edit-btn{
+    margin-top:1rem;
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;
+    background:#F1F5F9;
+    border:1px solid #E2E8F0;
+    color:#1A2234;
+    font-size:.9rem;
+    font-weight:700;
+    padding:.5rem 1.1rem;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .15s;
+}
+.pp-edit-btn:hover{
+    background:#1A2234;
+    color:white;
+}
+
+/* FORM */
+
+.pp-form{
+    display:flex;
+    flex-direction:column;
+    gap:1.1rem;
+}
+
+.pp-field{
+    display:flex;
+    flex-direction:column;
+    gap:.4rem;
+}
+
+.pp-label{
+    font-size:.85rem;
+    font-weight:700;
+    color:#64748B;
+}
+
+.pp-opt{
+    font-weight:400;
+    color:#CBD5E1;
+}
+
+.pp-input{
+    border:1.5px solid #E2E8F0;
+    border-radius:12px;
+    padding:.7rem .9rem;
+    font-size:1rem;
+    color:#1A2234;
+    background:#FAFAFA;
+    outline:none;
+    transition:border-color .15s, background .15s;
+}
+.pp-input:focus{
+    border-color:#1A2234;
+    background:white;
+}
+
+.pp-textarea{
+    resize:none;
+}
+
+.pp-count{
+    font-size:.75rem;
+    color:#CBD5E1;
+    text-align:right;
+}
+
+/* TWO COLUMN */
+
+.pp-two-col{
+    display:flex;
+    gap:1rem;
+}
+
+.pp-two-col .pp-field{
+    flex:1;
+}
+
+/* SELECT */
+
+.pp-select{
+    appearance:none;
+    cursor:pointer;
+}
+
+/* YEAR HINT */
+
+.pp-year-hint{
+    font-size:.8rem;
+    color:#4F46E5;
+    font-weight:600;
+    margin-top:.2rem;
+}
+
+/* FORM ACTIONS */
+
+.pp-form-actions{
+    display:flex;
+    gap:.6rem;
+    margin-top:.4rem;
+}
+
+.pp-save-btn,
+.pp-cancel-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.35rem;
+    font-size:.9rem;
+    font-weight:700;
+    padding:.5rem 1.2rem;
+    border-radius:999px;
+    cursor:pointer;
+}
+
+.pp-save-btn{
+    background:#1A2234;
+    color:white;
+    border:none;
+}
+.pp-save-btn:hover{
+    opacity:.85;
+}
+
+.pp-cancel-btn{
+    background:#F1F5F9;
+    color:#64748B;
+    border:1px solid #E2E8F0;
+}
+.pp-cancel-btn:hover{
+    background:#E2E8F0;
+}
+
+/* COLOR SWATCH */
+
+.pp-swatches{
+    display:flex;
+    gap:.5rem;
+    flex-wrap:wrap;
+    margin-top:.7rem;
+}
+
+.pp-swatch{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:2px solid transparent;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s;
+}
+
+.pp-swatch:hover{
+    transform:scale(1.1);
+}
+
+.pp-swatch-active{
+    box-shadow:0 0 0 2px white,0 0 0 4px currentColor;
+}
+
+/* MOBILE */
+
+@media(max-width:640px){
+
+    .pp-title{
+        font-size:1.6rem;
+    }
+
+    .pp-name{
+        font-size:1.25rem;
+    }
+
+    .pp-row{
+        font-size:1rem;
+    }
+
+    .pp-input{
+        font-size:1rem;
+    }
+
+    .pp-two-col{
+        flex-direction:column;
+    }
+
+    .pp-form-actions{
+        flex-direction:column;
+    }
+
+    .pp-save-btn,
+    .pp-cancel-btn{
+        width:100%;
+        justify-content:center;
+    }
+
+    .pp-toast{
+        width:calc(100% - 2rem);
+        text-align:center;
+    }
+
+}
