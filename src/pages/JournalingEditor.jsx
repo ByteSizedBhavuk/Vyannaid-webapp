@@ -11,41 +11,99 @@ import './JournalingEditor.css';
 
 /* ─── Character limit ────────────────────────────────────── */
 const CHAR_LIMIT = 3000;
+const QUICK_TAGS = ['gratitude', 'reflection', 'mood', 'goals', 'milestone', 'clarity'];
 
 /* ─── Tag input ──────────────────────────────────────────── */
 const TagInput = ({ tags, onChange }) => {
   const [input, setInput] = useState('');
+  const [isExpanding, setIsExpanding] = useState(false);
+  const inputRef = useRef(null);
 
-  const add = () => {
-    const t = input.trim().toLowerCase().replace(/\s+/g, '-');
+  const add = (text) => {
+    const t = (text || input).trim().toLowerCase().replace(/\s+/g, '-');
     if (t && !tags.includes(t) && tags.length < 5) {
       onChange([...tags, t]);
     }
     setInput('');
+    if (!text) setIsExpanding(false);
   };
 
   const remove = (tag) => onChange(tags.filter(t => t !== tag));
 
   return (
-    <div className="je-tag-area">
-      <div className="je-tags">
+    <div className="je-tag-container">
+      <div className="je-tag-header">
+        <div className="je-tag-label">
+          <Tag size={14} />
+          <span>Themes & Tags</span>
+        </div>
+        <span className="je-tag-count">{tags.length}/5</span>
+      </div>
+
+      <div className="je-tags-display">
         {tags.map(t => (
-          <span key={t} className="je-tag">
-            #{t}
-            <button className="je-tag-remove" onClick={() => remove(t)}><X size={11} /></button>
+          <span key={t} className="je-tag-pill">
+            <span className="je-tag-hash">#</span>
+            {t}
+            <button className="je-tag-remove" onClick={() => remove(t)} aria-label={`Remove ${t}`}>
+              <X size={12} />
+            </button>
           </span>
         ))}
+
         {tags.length < 5 && (
-          <input
-            className="je-tag-input"
-            placeholder="Add tag…"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); add(); } }}
-            onBlur={add}
-            maxLength={30}
-          />
+          <div className={`je-tag-input-wrapper ${isExpanding ? 'is-active' : ''}`}>
+            {!isExpanding ? (
+              <button
+                className="je-tag-add-trigger"
+                onClick={() => {
+                  setIsExpanding(true);
+                  setTimeout(() => inputRef.current?.focus(), 10);
+                }}
+              >
+                + Add tag
+              </button>
+            ) : (
+              <input
+                ref={inputRef}
+                className="je-tag-field"
+                placeholder="type and press enter..."
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    add();
+                  } else if (e.key === 'Escape') {
+                    setIsExpanding(false);
+                    setInput('');
+                  }
+                }}
+                onBlur={() => {
+                  if (!input.trim()) setIsExpanding(false);
+                  else add();
+                }}
+                maxLength={25}
+              />
+            )}
+          </div>
         )}
+      </div>
+
+      <div className="je-quick-tags">
+        <span className="je-quick-label">Suggestions:</span>
+        <div className="je-quick-list">
+          {QUICK_TAGS.filter(qt => !tags.includes(qt)).map(qt => (
+            <button
+              key={qt}
+              className="je-quick-tag-btn"
+              onClick={() => add(qt)}
+              disabled={tags.length >= 5}
+            >
+              #{qt}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -252,9 +310,8 @@ const JournalingEditor = () => {
             spellCheck
           />
 
-          {/* ── Tags (Subtle at the bottom) ── */}
+          {/* ── Tags (Modern Section) ── */}
           <div className="je-tags-section">
-            <Tag size={16} className="je-tag-icon" />
             <TagInput tags={tags} onChange={setTags} />
           </div>
         </div>

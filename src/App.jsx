@@ -33,6 +33,7 @@ import JournalingHome from "./pages/JournalingHome";
 import JournalingEditor from "./pages/JournalingEditor";
 import VolunteerApplication from "./pages/VolunteerApplication";
 import VolunteerForm from "./pages/VolunteerForm";
+import CalmMusic from "./pages/CalmMusic";
 
 
 
@@ -102,6 +103,11 @@ function App() {
           <Route path="/dashboard/volunteer/apply" element={
             <ProtectedRoute allowedRoles={["student"]}>
               <VolunteerForm />
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/calm-music" element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <CalmMusic />
             </ProtectedRoute>
           } />
 

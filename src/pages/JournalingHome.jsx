@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/StudentDashboard/DashboardLayout';
-import { Plus, ChevronLeft, ChevronRight, BookOpen, Calendar, List, X } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, BookOpen, Calendar, List, X, ArrowLeft } from 'lucide-react';
 import { getJournalEntries, getJournalCalendar, deleteJournalEntry } from '../api/journalApi';
 import './JournalingHome.css';
 
@@ -95,26 +95,35 @@ const JournalCalendar = ({ year, month, activeDays, onDayClick, onMonthChange })
   return (
     <div className="jh-calendar">
       <div className="jh-cal-header">
-        <button className="jh-cal-nav" onClick={() => onMonthChange(-1)}><ChevronLeft size={16} /></button>
-        <span className="jh-cal-title">{MONTHS[month - 1]} {year}</span>
-        <button className="jh-cal-nav" onClick={() => onMonthChange(1)}><ChevronRight size={16} /></button>
+        <div className="jh-cal-info">
+          <span className="jh-cal-month">{MONTHS[month - 1]}</span>
+          <span className="jh-cal-year">{year}</span>
+        </div>
+        <div className="jh-cal-actions">
+          <button className="jh-cal-nav-btn" onClick={() => onMonthChange(-1)} aria-label="Previous month">
+            <ChevronLeft size={18} />
+          </button>
+          <button className="jh-cal-nav-btn" onClick={() => onMonthChange(1)} aria-label="Next month">
+            <ChevronRight size={18} />
+          </button>
+        </div>
       </div>
       <div className="jh-cal-grid">
-        {DAYS.map(d => <div key={d} className="jh-cal-dayname">{d}</div>)}
+        {DAYS.map(d => <div key={d} className="jh-cal-weekday">{d[0]}</div>)}
         {cells.map((day, i) => {
-          if (!day) return <div key={`e-${i}`} className="jh-cal-cell empty" />;
+          if (!day) return <div key={`e-${i}`} className="jh-cal-day jh-cal-day-empty" />;
           const isToday = day === today.getDate() && month === today.getMonth() + 1 && year === today.getFullYear();
           const hasEntry = activeSet.has(day);
           return (
-            <div
+            <button
               key={day}
-              className={`jh-cal-cell ${isToday ? 'today' : ''} ${hasEntry ? 'has-entry' : ''}`}
+              className={`jh-cal-day ${isToday ? 'is-today' : ''} ${hasEntry ? 'has-entry' : ''}`}
               onClick={() => hasEntry && onDayClick(day)}
-              title={hasEntry ? 'Has entries' : ''}
+              disabled={!hasEntry && !isToday}
             >
-              {day}
-              {hasEntry && <span className="jh-cal-dot" />}
-            </div>
+              <span className="jh-cal-day-number">{day}</span>
+              {hasEntry && <span className="jh-cal-entry-dot" />}
+            </button>
           );
         })}
       </div>
@@ -213,6 +222,10 @@ const JournalingHome = () => {
       <div className="jh-page">
         {/* ── Hero / Header ── */}
         <div className="jh-hero">
+          <button className="jh-back-btn" onClick={() => navigate('/dashboard/activities')}>
+            <ArrowLeft size={18} />
+            <span>Back</span>
+          </button>
           <div className="jh-hero-content">
             <h1 className="jh-hero-title">Mindful Journal</h1>
             <div className="jh-hero-stats-bar">
@@ -312,11 +325,21 @@ const JournalingHome = () => {
 
                 {!loading && !error && entries.length === 0 && (
                   <div className="jh-empty-state">
-                    <div className="jh-empty-icon"><BookOpen size={48} strokeWidth={1} /></div>
-                    <h3>Your journal is empty</h3>
-                    <p>Begin your mindfulness journey today.</p>
-                    <button className="jh-empty-btn" onClick={() => handleNewEntry(null)}>
-                      Start Writing
+                    <div className="jh-empty-illustration">
+                      <div className="jh-empty-circle">
+                        <BookOpen size={40} />
+                      </div>
+                      <div className="jh-empty-dots">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+                    <div className="jh-empty-text">
+                      <h3>Begin Your Journey</h3>
+                      <p>Your mindful reflections will appear here. Why not start with your first entry today?</p>
+                    </div>
+                    <button className="jh-empty-cta" onClick={() => handleNewEntry(null)}>
+                      <Plus size={18} />
+                      <span>Create Your First Entry</span>
                     </button>
                   </div>
                 )}
@@ -335,30 +358,38 @@ const JournalingHome = () => {
                           className="jh-card"
                           onClick={() => navigate(`/dashboard/journaling/${entry._id}`)}
                         >
-                          <div className="jh-card-inner">
+                          <div className="jh-card-header">
                             <h3 className="jh-card-title">{entry.title || 'Untitled Entry'}</h3>
-                            <p className="jh-card-preview">
-                              {entry.body.slice(0, 120)}{entry.body.length > 120 ? '…' : ''}
-                            </p>
-
-                            <div className="jh-card-footer">
-                              <span className="jh-card-time">{formatTime(entry.createdAt)}</span>
-                              <div className="jh-card-actions">
-                                {entry.wordCount > 0 && <span className="jh-card-words">{entry.wordCount} words</span>}
-                                <button
-                                  className="jh-card-delete"
-                                  disabled={deleting === entry._id}
-                                  onClick={(e) => handleDelete(e, entry._id)}
-                                  aria-label="Delete entry"
-                                >
-                                  {deleting === entry._id ? '…' : <X size={14} />}
-                                </button>
-                              </div>
-                            </div>
+                            <span className="jh-card-time">{formatTime(entry.createdAt)}</span>
                           </div>
 
-                          {/* Accent bar on the side dependent on tags optionally */}
-                          <div className="jh-card-accent"></div>
+                          <p className="jh-card-preview">
+                            {entry.body.slice(0, 140)}{entry.body.length > 140 ? '…' : ''}
+                          </p>
+
+                          <div className="jh-card-footer">
+                            <div className="jh-card-tags">
+                              {entry.tags && entry.tags.length > 0 ? (
+                                entry.tags.map(tag => (
+                                  <span key={tag} className="jh-card-tag">#{tag}</span>
+                                ))
+                              ) : (
+                                <span className="jh-card-no-tags">No tags</span>
+                              )}
+                            </div>
+
+                            <div className="jh-card-meta">
+                              {entry.wordCount > 0 && <span className="jh-card-words">{entry.wordCount} words</span>}
+                              <button
+                                className="jh-card-delete"
+                                disabled={deleting === entry._id}
+                                onClick={(e) => handleDelete(e, entry._id)}
+                                aria-label="Delete entry"
+                              >
+                                {deleting === entry._id ? '…' : <X size={14} />}
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
