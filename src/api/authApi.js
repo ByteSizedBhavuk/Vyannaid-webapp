@@ -14,6 +14,20 @@ api.interceptors.request.use((req) => {
   return req;
 });
 
+// Intercept responses to handle global 401 Unauthorized (e.g., token expired)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Clear token and redirect to login if unauthorized
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Auth endpoints
 export const registerUser = (data) => api.post("/auth/register", data);
-export const loginUser    = (data) => api.post("/auth/login", data);
+export const loginUser = (data) => api.post("/auth/login", data);

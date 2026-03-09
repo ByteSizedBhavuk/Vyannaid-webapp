@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/StudentDashboard/DashboardLayout';
-import { Plus, ChevronLeft, ChevronRight, BookOpen, Calendar, List } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, BookOpen, Calendar, List, X } from 'lucide-react';
 import { getJournalEntries, getJournalCalendar, deleteJournalEntry } from '../api/journalApi';
 import './JournalingHome.css';
 
 /* ─── helpers ─────────────────────────────────────────────── */
 const MONTHS = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December'
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
-const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function groupByDay(entries) {
   const map = {};
@@ -25,9 +25,9 @@ function groupByDay(entries) {
 
 function formatDayLabel(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
-  const today     = new Date(); today.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
   const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-  if (d.getTime() === today.getTime())     return 'Today';
+  if (d.getTime() === today.getTime()) return 'Today';
   if (d.getTime() === yesterday.getTime()) return 'Yesterday';
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
@@ -57,9 +57,9 @@ const JournalCalendar = ({ year, month, activeDays, onDayClick, onMonthChange })
   return (
     <div className="jh-calendar">
       <div className="jh-cal-header">
-        <button className="jh-cal-nav" onClick={() => onMonthChange(-1)}><ChevronLeft size={16}/></button>
+        <button className="jh-cal-nav" onClick={() => onMonthChange(-1)}><ChevronLeft size={16} /></button>
         <span className="jh-cal-title">{MONTHS[month - 1]} {year}</span>
-        <button className="jh-cal-nav" onClick={() => onMonthChange(1)}><ChevronRight size={16}/></button>
+        <button className="jh-cal-nav" onClick={() => onMonthChange(1)}><ChevronRight size={16} /></button>
       </div>
       <div className="jh-cal-grid">
         {DAYS.map(d => <div key={d} className="jh-cal-dayname">{d}</div>)}
@@ -89,14 +89,14 @@ const JournalingHome = () => {
   const navigate = useNavigate();
   const now = new Date();
 
-  const [view, setView]           = useState('list');   // 'list' | 'calendar'
-  const [entries, setEntries]     = useState([]);
-  const [calDays, setCalDays]     = useState([]);
-  const [calYear, setCalYear]     = useState(now.getFullYear());
-  const [calMonth, setCalMonth]   = useState(now.getMonth() + 1);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState('');
-  const [deleting, setDeleting]   = useState(null);
+  const [view, setView] = useState('list');   // 'list' | 'calendar'
+  const [entries, setEntries] = useState([]);
+  const [calDays, setCalDays] = useState([]);
+  const [calYear, setCalYear] = useState(now.getFullYear());
+  const [calMonth, setCalMonth] = useState(now.getMonth() + 1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [deleting, setDeleting] = useState(null);
 
   const loadEntries = useCallback(async () => {
     setLoading(true);
@@ -126,15 +126,15 @@ const JournalingHome = () => {
   const handleMonthChange = (delta) => {
     let m = calMonth + delta;
     let y = calYear;
-    if (m < 1)  { m = 12; y -= 1; }
-    if (m > 12) { m = 1;  y += 1; }
+    if (m < 1) { m = 12; y -= 1; }
+    if (m > 12) { m = 1; y += 1; }
     setCalMonth(m);
     setCalYear(y);
   };
 
   const handleCalDayClick = (day) => {
-    const dateStr = `${calYear}-${String(calMonth).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-    const match = entries.find(e => e.createdAt.slice(0,10) === dateStr);
+    const dateStr = `${calYear}-${String(calMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const match = entries.find(e => e.createdAt.slice(0, 10) === dateStr);
     if (match) navigate(`/dashboard/journaling/${match._id}`);
   };
 
@@ -172,109 +172,123 @@ const JournalingHome = () => {
   return (
     <DashboardLayout>
       <div className="jh-page">
-
-        {/* ── Header ── */}
-        <div className="jh-header">
-          <div>
-            <h1 className="jh-title">Journal</h1>
-            <p className="jh-subtitle">
-              {entries.length} {entries.length === 1 ? 'entry' : 'entries'} · {totalWords.toLocaleString()} words written
+        {/* ── Hero / Header ── */}
+        <div className="jh-hero">
+          <div className="jh-hero-content">
+            <h1 className="jh-hero-title">Mindful Journal</h1>
+            <p className="jh-hero-subtitle">
+              Your safe space to reflect, process, and grow.<br />
+              <span className="jh-hero-stats">{entries.length} {entries.length === 1 ? 'entry' : 'entries'} · {totalWords.toLocaleString()} words</span>
             </p>
           </div>
-          <div className="jh-header-actions">
-            <div className="jh-view-toggle">
-              <button className={`jh-view-btn ${view === 'list' ? 'active' : ''}`} onClick={() => setView('list')}>
-                <List size={16} />
-              </button>
-              <button className={`jh-view-btn ${view === 'calendar' ? 'active' : ''}`} onClick={() => setView('calendar')}>
-                <Calendar size={16} />
-              </button>
-            </div>
-            <button className="jh-new-btn" onClick={() => handleNewEntry(null)}>
-              <Plus size={16} /> {todayEntry ? 'Edit Today\'s Entry' : 'New Entry'}
-            </button>
+          <button className="jh-hero-btn" onClick={() => handleNewEntry(null)}>
+            <Plus size={18} strokeWidth={2.5} />
+            {todayEntry ? 'Edit Today\'s Entry' : 'Write a New Entry'}
+          </button>
+        </div>
+
+        {/* ── Prompt of the Day (Glassmorphism card) ── */}
+        <div
+          className="jh-prompt-card"
+          onClick={() => handleNewEntry({ selectedPrompt: "How has your perspective on a personal challenge shifted over the past week?" })}
+        >
+          <div className="jh-prompt-bg"></div>
+          <div className="jh-prompt-content">
+            <span className="jh-prompt-tag">Daily Reflection</span>
+            <p className="jh-prompt-text">"How has your perspective on a personal challenge shifted over the past week?"</p>
+            <div className="jh-prompt-cta">Respond thoughtfully <ChevronRight size={14} /></div>
           </div>
         </div>
 
-        {/* ── Prompt of the Day ── */}
-        <div className="jh-prompt-card" onClick={() => handleNewEntry({ selectedPrompt: "How has your perspective on a personal challenge shifted over the past week?" })}>
-          <span className="jh-prompt-tag">PROMPT OF THE DAY</span>
-          <p className="jh-prompt-text">"How has your perspective on a personal challenge shifted over the past week?"</p>
-          <span className="jh-prompt-cta">Respond →</span>
-        </div>
+        {/* ── Tabs & Content Area ── */}
+        <div className="jh-content-area">
+          <div className="jh-tabs">
+            <button className={`jh-tab ${view === 'list' ? 'active' : ''}`} onClick={() => setView('list')}>
+              <List size={16} /> Entries
+            </button>
+            <button className={`jh-tab ${view === 'calendar' ? 'active' : ''}`} onClick={() => setView('calendar')}>
+              <Calendar size={16} /> Calendar
+            </button>
+          </div>
 
-        {/* ── Calendar View ── */}
-        {view === 'calendar' && (
-          <JournalCalendar
-            year={calYear}
-            month={calMonth}
-            activeDays={calDays}
-            onDayClick={handleCalDayClick}
-            onMonthChange={handleMonthChange}
-          />
-        )}
-
-        {/* ── List View ── */}
-        {view === 'list' && (
-          <div className="jh-list">
-            {loading && <p className="jh-empty">Loading entries…</p>}
-            {!loading && error && <p className="jh-empty jh-error">{error}</p>}
-            {!loading && !error && entries.length === 0 && (
-              <div className="jh-empty-state">
-                <BookOpen size={40} strokeWidth={1.2} />
-                <p>No entries yet. Start your first journal entry.</p>
-                <button className="jh-new-btn" onClick={() => handleNewEntry(null)}>
-                  <Plus size={16} /> Write something
-                </button>
+          <div className="jh-content">
+            {/* ── Calendar View ── */}
+            {view === 'calendar' && (
+              <div className="jh-calendar-wrapper fade-in">
+                <JournalCalendar
+                  year={calYear}
+                  month={calMonth}
+                  activeDays={calDays}
+                  onDayClick={handleCalDayClick}
+                  onMonthChange={handleMonthChange}
+                />
               </div>
             )}
-            {!loading && grouped.map(([dateStr, dayEntries]) => (
-              <div key={dateStr} className="jh-day-group">
-                <div className="jh-day-label">
-                  <span>{formatDayLabel(dateStr)}</span>
-                  <span className="jh-day-count">{dayEntries.length} {dayEntries.length === 1 ? 'entry' : 'entries'}</span>
-                </div>
-                {dayEntries.map(entry => (
-                  <div
-                    key={entry._id}
-                    className="jh-entry-card"
-                    onClick={() => navigate(`/dashboard/journaling/${entry._id}`)}
-                  >
-                    <div className="jh-entry-top">
-                      <h3 className="jh-entry-title">{entry.title || 'Untitled Entry'}</h3>
-                      <div className="jh-entry-meta">
-                        <span className="jh-entry-time">{formatTime(entry.createdAt)}</span>
-                        {entry.updatedAt !== entry.createdAt && (
-                          <span className="jh-entry-edited">edited {formatUpdated(entry.updatedAt)}</span>
-                        )}
-                      </div>
+
+            {/* ── List View ── */}
+            {view === 'list' && (
+              <div className="jh-list fade-in">
+                {loading && <div className="jh-loading-pulse">Loading your reflections…</div>}
+                {!loading && error && <div className="jh-empty jh-error">{error}</div>}
+
+                {!loading && !error && entries.length === 0 && (
+                  <div className="jh-empty-state">
+                    <div className="jh-empty-icon"><BookOpen size={48} strokeWidth={1} /></div>
+                    <h3>Your journal is empty</h3>
+                    <p>Begin your mindfulness journey today.</p>
+                    <button className="jh-empty-btn" onClick={() => handleNewEntry(null)}>
+                      Start Writing
+                    </button>
+                  </div>
+                )}
+
+                {!loading && grouped.map(([dateStr, dayEntries]) => (
+                  <div key={dateStr} className="jh-day-group">
+                    <div className="jh-day-header">
+                      <span className="jh-day-date">{formatDayLabel(dateStr)}</span>
+                      <span className="jh-day-line"></span>
                     </div>
-                    <p className="jh-entry-preview">
-                      {entry.body.slice(0, 140)}{entry.body.length > 140 ? '…' : ''}
-                    </p>
-                    <div className="jh-entry-footer">
-                      {entry.tags?.length > 0 && (
-                        <div className="jh-entry-tags">
-                          {entry.tags.slice(0, 3).map(tag => (
-                            <span key={tag} className="jh-tag">#{tag}</span>
-                          ))}
+
+                    <div className="jh-cards-grid">
+                      {dayEntries.map(entry => (
+                        <div
+                          key={entry._id}
+                          className="jh-card"
+                          onClick={() => navigate(`/dashboard/journaling/${entry._id}`)}
+                        >
+                          <div className="jh-card-inner">
+                            <h3 className="jh-card-title">{entry.title || 'Untitled Entry'}</h3>
+                            <p className="jh-card-preview">
+                              {entry.body.slice(0, 120)}{entry.body.length > 120 ? '…' : ''}
+                            </p>
+
+                            <div className="jh-card-footer">
+                              <span className="jh-card-time">{formatTime(entry.createdAt)}</span>
+                              <div className="jh-card-actions">
+                                {entry.wordCount > 0 && <span className="jh-card-words">{entry.wordCount} words</span>}
+                                <button
+                                  className="jh-card-delete"
+                                  disabled={deleting === entry._id}
+                                  onClick={(e) => handleDelete(e, entry._id)}
+                                  aria-label="Delete entry"
+                                >
+                                  {deleting === entry._id ? '…' : <X size={14} />}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Accent bar on the side dependent on tags optionally */}
+                          <div className="jh-card-accent"></div>
                         </div>
-                      )}
-                      <span className="jh-entry-words">{entry.wordCount || 0} words</span>
-                      <button
-                        className="jh-delete-btn"
-                        disabled={deleting === entry._id}
-                        onClick={(e) => handleDelete(e, entry._id)}
-                      >
-                        {deleting === entry._id ? '…' : '✕'}
-                      </button>
+                      ))}
                     </div>
                   </div>
                 ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
+        </div>
 
       </div>
     </DashboardLayout>

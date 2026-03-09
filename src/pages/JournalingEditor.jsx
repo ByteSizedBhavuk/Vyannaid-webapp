@@ -32,7 +32,7 @@ const TagInput = ({ tags, onChange }) => {
         {tags.map(t => (
           <span key={t} className="je-tag">
             #{t}
-            <button className="je-tag-remove" onClick={() => remove(t)}><X size={11}/></button>
+            <button className="je-tag-remove" onClick={() => remove(t)}><X size={11} /></button>
           </span>
         ))}
         {tags.length < 5 && (
@@ -53,26 +53,26 @@ const TagInput = ({ tags, onChange }) => {
 
 /* ─── Main Editor ────────────────────────────────────────── */
 const JournalingEditor = () => {
-  const navigate        = useNavigate();
-  const location        = useLocation();
-  const { id }          = useParams();           // present when editing
-  const isEdit          = Boolean(id);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = useParams();           // present when editing
+  const isEdit = Boolean(id);
 
-  const selectedPrompt  = location.state?.selectedPrompt;
+  const selectedPrompt = location.state?.selectedPrompt;
 
-  const [title,   setTitle]   = useState('');
-  const [body,    setBody]    = useState('');
-  const [tags,    setTags]    = useState([]);
-  const [saving,  setSaving]  = useState(false);
-  const [error,   setError]   = useState('');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [tags, setTags] = useState([]);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(isEdit);
-  const [toast,   setToast]   = useState(null); // { type: 'warn' | 'limit', msg: string }
+  const [toast, setToast] = useState(null); // { type: 'warn' | 'limit', msg: string }
 
   const toastTimerRef = useRef(null);
 
   // Timestamps for display
-  const [createdAt,  setCreatedAt]  = useState(null);
-  const [updatedAt,  setUpdatedAt]  = useState(null);
+  const [createdAt, setCreatedAt] = useState(null);
+  const [updatedAt, setUpdatedAt] = useState(null);
 
   const bodyRef = useRef(null);
 
@@ -132,7 +132,7 @@ const JournalingEditor = () => {
     try {
       const payload = {
         title: title.trim() || 'Untitled Entry',
-        body:  body.trim(),
+        body: body.trim(),
         tags,
         prompt: selectedPrompt || undefined
       };
@@ -177,53 +177,50 @@ const JournalingEditor = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="je-loading">Loading entry…</div>
+        <div className="je-loading">Preparing your journal…</div>
       </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
-      <div className="je-page">
+      <div className="je-page fade-in">
 
-        {/* ── Top Bar ── */}
+        {/* ── Top Bar (Floating) ── */}
         <header className="je-topbar">
-          <button className="je-back-btn" onClick={() => navigate('/dashboard/journaling')}>
-            <ArrowLeft size={18} />
-          </button>
+          <div className="je-topbar-left">
+            <button className="je-icon-btn" onClick={() => navigate('/dashboard/journaling')} aria-label="Go back">
+              <ArrowLeft size={20} />
+            </button>
+            <div className="je-meta-info">
+              <span className="je-date">{displayDate}</span>
+              {updatedAt && updatedAt !== createdAt && (
+                <span className="je-edited-dot" title={`Edited ${new Date(updatedAt).toLocaleDateString()}`}></span>
+              )}
+            </div>
+          </div>
 
-          <div className="je-save-area">
+          <div className="je-topbar-right">
+            <span className={`je-wordcount ${body.length >= CHAR_LIMIT ? 'je-wordcount-limit' : body.length >= CHAR_LIMIT * 0.9 ? 'je-wordcount-warn' : ''}`}>
+              {body.length} / {CHAR_LIMIT}
+            </span>
             {error && <span className="je-error-inline">{error}</span>}
             <button
               className="je-save-btn"
               onClick={handleSave}
               disabled={saving}
             >
-              <Save size={15} />
-              {saving ? 'Saving…' : isEdit ? 'Save' : 'Save Entry'}
+              <Save size={16} />
+              {saving ? 'Saving…' : isEdit ? 'Save Changes' : 'Complete Entry'}
             </button>
           </div>
         </header>
 
-        {/* ── Metadata row ── */}
-        <div className="je-meta-row">
-          <span className="je-date">{displayDate}</span>
-          <span className="je-time">{displayTime}</span>
-          {updatedAt && updatedAt !== createdAt && (
-            <span className="je-edited-badge">
-              Edited {new Date(updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </span>
-          )}
-          <span className={`je-wordcount ${body.length >= CHAR_LIMIT ? 'je-wordcount-limit' : body.length >= CHAR_LIMIT * 0.9 ? 'je-wordcount-warn' : ''}`}>
-            {body.length} / {CHAR_LIMIT}
-          </span>
-        </div>
-
-        {/* ── Writing area ── */}
-        <div className="je-writing-area">
+        {/* ── Zen Writing Area ── */}
+        <div className="je-writing-container">
           <input
             className="je-title-input"
-            placeholder="Untitled Entry"
+            placeholder="Give your thoughts a title…"
             value={title}
             onChange={e => setTitle(e.target.value)}
             maxLength={200}
@@ -231,28 +228,30 @@ const JournalingEditor = () => {
 
           {selectedPrompt && !isEdit && (
             <div className="je-prompt-bubble">
-              <span className="je-prompt-label">PROMPT</span>
-              <p>{selectedPrompt}</p>
+              <div className="je-prompt-icon">✨</div>
+              <div className="je-prompt-content">
+                <span className="je-prompt-label">Daily Prompt</span>
+                <p>{selectedPrompt}</p>
+              </div>
             </div>
           )}
 
           <textarea
             ref={bodyRef}
             className={`je-body-textarea ${body.length >= CHAR_LIMIT ? 'at-limit' : ''}`}
-            placeholder="Start writing here… let your thoughts flow freely."
+            placeholder="Start writing here. This space is just for you…"
             value={body}
             onChange={e => setBody(e.target.value)}
             maxLength={CHAR_LIMIT}
             spellCheck
           />
-        </div>
 
-        {/* ── Tags ── */}
-        <div className="je-tags-row">
-          <Tag size={14} className="je-tag-icon" />
-          <TagInput tags={tags} onChange={setTags} />
+          {/* ── Tags (Subtle at the bottom) ── */}
+          <div className="je-tags-section">
+            <Tag size={16} className="je-tag-icon" />
+            <TagInput tags={tags} onChange={setTags} />
+          </div>
         </div>
-
       </div>
 
       {/* ── Char limit toast ── */}

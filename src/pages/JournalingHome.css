@@ -1,358 +1,597 @@
+/* ── Variables & Animations ───────────────────────────────── */
+:root {
+  --jh-primary: #1e293b;
+  --jh-surface: #ffffff;
+  --jh-bg: #f8fafc;
+  --jh-text: #334155;
+  --jh-muted: #64748b;
+  --jh-border: #e2e8f0;
+  --jh-accent: #0f172a;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ── Page shell ─────────────────────────────────────────── */
 .jh-page {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 760px;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
-/* ── Header ─────────────────────────────────────────────── */
-.jh-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.jh-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #1a2234;
-  margin: 0 0 0.2rem;
-  letter-spacing: -0.02em;
-}
-
-.jh-subtitle {
-  font-size: 0.85rem;
-  color: #94a3b8;
-  margin: 0;
-}
-
-.jh-header-actions {
+/* ── Hero / Header ──────────────────────────────────────── */
+.jh-hero {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--jh-border);
+}
+
+.jh-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.jh-hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--jh-primary);
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.jh-hero-subtitle {
+  font-size: 1rem;
+  color: var(--jh-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.jh-hero-stats {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #94a3b8;
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+.jh-hero-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--jh-primary);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.jh-hero-btn:hover {
+  background: var(--jh-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Prompt of the Day (Glassmorphism) ──────────────────── */
+.jh-prompt-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 2rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  background: #1e293b;
+  color: white;
+}
+
+.jh-prompt-card:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.jh-prompt-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(20, 27, 40, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
+  z-index: 1;
+}
+
+/* Add a subtle organic gradient blob in the background */
+.jh-prompt-bg::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 70% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%);
+  z-index: 2;
+  transition: transform 0.5s ease;
+}
+
+.jh-prompt-card:hover .jh-prompt-bg::after {
+  transform: scale(1.05) translate(-2%, 2%);
+}
+
+.jh-prompt-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 }
 
-/* ── View toggle ─────────────────────────────────────────── */
-.jh-view-toggle {
-  display: flex;
-  background: #f1f5f9;
-  border-radius: 8px;
-  padding: 3px;
-  gap: 2px;
-}
-
-.jh-view-btn {
-  background: none;
-  border: none;
-  border-radius: 6px;
-  padding: 0.35rem 0.6rem;
-  color: #94a3b8;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background 0.15s, color 0.15s;
-}
-
-.jh-view-btn.active {
-  background: #ffffff;
-  color: #1a2234;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
-/* ── New entry button ────────────────────────────────────── */
-.jh-new-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: #1a2234;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 0.55rem 1.1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.jh-new-btn:hover { background: #2d3f5c; }
-
-/* ── Prompt card ─────────────────────────────────────────── */
-.jh-prompt-card {
-  background: linear-gradient(135deg, #1a2234 0%, #2d3f5c 100%);
-  border-radius: 16px;
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-
-.jh-prompt-card:hover { transform: translateY(-2px); }
-
 .jh-prompt-tag {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #94a3b8;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  display: inline-block;
 }
 
 .jh-prompt-text {
-  font-size: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
   color: #f1f5f9;
-  margin: 0.4rem 0 0.6rem;
-  line-height: 1.5;
+  margin: 0;
+  line-height: 1.4;
   font-style: italic;
+  max-width: 90%;
 }
 
 .jh-prompt-cta {
-  font-size: 0.8rem;
-  color: #64b5f6;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #38bdf8;
   font-weight: 600;
+  margin-top: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.jh-prompt-card:hover .jh-prompt-cta {
+  transform: translateX(4px);
+}
+
+/* ── Tabs & Content Area ────────────────────────────────── */
+.jh-content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.jh-tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--jh-border);
+  padding-bottom: 0px;
+}
+
+.jh-tab {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--jh-muted);
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.jh-tab:hover {
+  color: var(--jh-primary);
+}
+
+.jh-tab.active {
+  color: var(--jh-primary);
+}
+
+.jh-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--jh-primary);
+  border-radius: 2px 2px 0 0;
+}
+
+.jh-content {
+  position: relative;
+  min-height: 400px;
 }
 
 /* ── Calendar ────────────────────────────────────────────── */
+.jh-calendar-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
 .jh-calendar {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.25rem;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+  background: var(--jh-surface);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--jh-border);
 }
 
 .jh-cal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .jh-cal-title {
-  font-weight: 700;
-  color: #1a2234;
-  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--jh-primary);
+  font-size: 1.1rem;
 }
 
 .jh-cal-nav {
-  background: none;
+  background: #f1f5f9;
   border: none;
   cursor: pointer;
-  color: #64748b;
-  padding: 0.3rem;
-  border-radius: 6px;
+  color: var(--jh-text);
+  padding: 0.5rem;
+  border-radius: 50%;
   display: flex;
   align-items: center;
+  transition: background 0.2s;
 }
 
-.jh-cal-nav:hover { background: #f1f5f9; }
+.jh-cal-nav:hover {
+  background: #e2e8f0;
+}
 
 .jh-cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 6px;
 }
 
 .jh-cal-dayname {
   text-align: center;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #94a3b8;
-  padding: 0.3rem 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--jh-muted);
+  padding: 0.5rem 0;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .jh-cal-cell {
   position: relative;
   text-align: center;
-  padding: 0.5rem 0.2rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  color: #374151;
+  padding: 0.75rem 0.2rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--jh-text);
   cursor: default;
-  transition: background 0.1s;
-  min-height: 36px;
+  transition: all 0.2s ease;
+  min-height: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.jh-cal-cell.empty { background: transparent; }
+.jh-cal-cell.empty {
+  background: transparent;
+}
 
 .jh-cal-cell.today {
-  background: #1a2234;
+  background: var(--jh-primary);
   color: #fff;
   font-weight: 700;
 }
 
 .jh-cal-cell.has-entry {
   cursor: pointer;
-  background: #e0f2fe;
+  background: #f0f9ff;
   color: #0369a1;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.jh-cal-cell.has-entry:hover { background: #bae6fd; }
+.jh-cal-cell.has-entry:hover {
+  background: #e0f2fe;
+  transform: scale(1.05);
+}
 
 .jh-cal-cell.today.has-entry {
-  background: #0369a1;
+  background: var(--jh-accent);
   color: #fff;
 }
 
 .jh-cal-dot {
   display: block;
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: #0369a1;
-  margin-top: 2px;
+  background: #0ea5e9;
+  margin-top: 4px;
 }
 
-.jh-cal-cell.today .jh-cal-dot { background: #fff; }
+.jh-cal-cell.today .jh-cal-dot {
+  background: #38bdf8;
+}
 
 /* ── Entry list ──────────────────────────────────────────── */
-.jh-list { display: flex; flex-direction: column; gap: 1.5rem; }
-
-.jh-day-group { display: flex; flex-direction: column; gap: 0.65rem; }
-
-.jh-day-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0 0.25rem;
-}
-
-.jh-day-count { font-weight: 500; color: #cbd5e1; }
-
-/* ── Entry card ──────────────────────────────────────────── */
-.jh-entry-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.1rem 1.25rem;
-  cursor: pointer;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  transition: box-shadow 0.15s, transform 0.15s;
-}
-
-.jh-entry-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-  transform: translateY(-1px);
-}
-
-.jh-entry-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.jh-entry-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #1a2234;
-  margin: 0;
-}
-
-.jh-entry-meta {
+.jh-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 0.15rem;
-  flex-shrink: 0;
+  gap: 2.5rem;
 }
 
-.jh-entry-time {
-  font-size: 0.75rem;
-  color: #94a3b8;
-  white-space: nowrap;
+.jh-day-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.jh-entry-edited {
-  font-size: 0.7rem;
-  color: #cbd5e1;
-  white-space: nowrap;
-  font-style: italic;
-}
-
-.jh-entry-preview {
-  font-size: 0.875rem;
-  color: #64748b;
-  margin: 0 0 0.75rem;
-  line-height: 1.55;
-}
-
-.jh-entry-footer {
+.jh-day-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
-.jh-entry-tags { display: flex; gap: 0.35rem; flex: 1; flex-wrap: wrap; }
+.jh-day-date {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--jh-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
 
-.jh-tag {
-  font-size: 0.7rem;
-  color: #0369a1;
-  background: #e0f2fe;
-  border-radius: 99px;
-  padding: 0.15rem 0.55rem;
+.jh-day-line {
+  flex: 1;
+  height: 1px;
+  background: var(--jh-border);
+}
+
+.jh-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── Entry card ──────────────────────────────────────────── */
+.jh-card {
+  position: relative;
+  background: var(--jh-surface);
+  border-radius: 16px;
+  cursor: pointer;
+  border: 1px solid var(--jh-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  display: flex;
+}
+
+.jh-card:hover {
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+}
+
+.jh-card-accent {
+  width: 6px;
+  background: #cbd5e1;
+  transition: background 0.3s;
+}
+
+.jh-card:hover .jh-card-accent {
+  background: var(--jh-primary);
+}
+
+.jh-card-inner {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.jh-card-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--jh-primary);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.jh-card-preview {
+  font-size: 0.95rem;
+  color: var(--jh-text);
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.jh-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.jh-card-time {
+  font-size: 0.8rem;
+  color: var(--jh-muted);
+  font-weight: 500;
+}
+
+.jh-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.jh-card-words {
+  font-size: 0.75rem;
+  color: var(--jh-muted);
+  background: #f1f5f9;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
   font-weight: 600;
 }
 
-.jh-entry-words {
-  font-size: 0.75rem;
-  color: #cbd5e1;
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-.jh-delete-btn {
+.jh-card-delete {
   background: none;
   border: none;
-  color: #e2e8f0;
+  color: #cbd5e1;
   cursor: pointer;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.4rem;
+  padding: 0.3rem;
   border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
 
-.jh-delete-btn:hover { color: #ef4444; background: #fef2f2; }
+/* Stop event propagation from clicking the card */
+.jh-card-delete:hover {
+  color: #ef4444;
+  background: #fef2f2;
+}
 
-/* ── Empty states ────────────────────────────────────────── */
-.jh-empty {
+/* ── Empty & Loading states ──────────────────────────────── */
+.jh-loading-pulse {
   text-align: center;
-  color: #94a3b8;
-  font-size: 0.9rem;
-  padding: 1rem;
+  color: var(--jh-muted);
+  font-size: 1rem;
+  padding: 3rem;
+  font-weight: 500;
+  animation: pulse 2s infinite ease-in-out;
 }
 
-.jh-error { color: #ef4444; }
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.jh-error {
+  color: #ef4444;
+  text-align: center;
+  padding: 2rem;
+}
 
 .jh-empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 3rem 1rem;
-  color: #94a3b8;
+  justify-content: center;
+  padding: 4rem 2rem;
   text-align: center;
+  background: var(--jh-surface);
+  border-radius: 24px;
+  border: 1px dashed #cbd5e1;
 }
 
-.jh-empty-state p { font-size: 0.9rem; margin: 0; }
+.jh-empty-icon {
+  background: #f1f5f9;
+  color: #94a3b8;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.jh-empty-state h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--jh-primary);
+  margin: 0 0 0.5rem;
+}
+
+.jh-empty-state p {
+  font-size: 1rem;
+  color: var(--jh-muted);
+  margin: 0 0 2rem;
+}
+
+.jh-empty-btn {
+  background: #fff;
+  border: 1px solid var(--jh-border);
+  color: var(--jh-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.jh-empty-btn:hover {
+  background: var(--jh-bg);
+  border-color: #cbd5e1;
+}
 
 /* ── Responsive ──────────────────────────────────────────── */
-@media (max-width: 600px) {
-  .jh-page { padding: 1rem; }
-  .jh-entry-top { flex-direction: column; }
-  .jh-entry-meta { align-items: flex-start; }
+@media (max-width: 640px) {
+  .jh-page {
+    padding: 1.25rem;
+  }
+
+  .jh-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .jh-prompt-card {
+    padding: 1.5rem;
+  }
+
+  .jh-cards-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -4,10 +4,10 @@ import { logMood } from '../../api/moodApi';
 import './MoodCheckIn.css';
 
 const MOODS = [
-  { score: 1, emoji: '😔', label: 'Awful'   },
-  { score: 2, emoji: '😕', label: 'Bad'     },
-  { score: 3, emoji: '😐', label: 'Okay'    },
-  { score: 4, emoji: '😊', label: 'Good'    },
+  { score: 1, emoji: '😔', label: 'Awful' },
+  { score: 2, emoji: '😕', label: 'Bad' },
+  { score: 3, emoji: '😐', label: 'Okay' },
+  { score: 4, emoji: '😊', label: 'Good' },
   { score: 5, emoji: '😄', label: 'Amazing' },
 ];
 
@@ -30,13 +30,14 @@ const MoodCheckIn = ({ onMoodLogged }) => {
 
   const [popupVisible, setPopupVisible] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
-  const [selected,     setSelected]     = useState(null);
-  const [saving,       setSaving]       = useState(false);
-  const [done,         setDone]         = useState(false);
-  const [countdown,    setCountdown]    = useState(TOAST_DURATION);
+  const [selected, setSelected] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [done, setDone] = useState(false);
+  const [countdown, setCountdown] = useState(TOAST_DURATION);
   const [hasLoggedToday, setHasLoggedToday] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const toastTimerRef     = useRef(null);
+  const toastTimerRef = useRef(null);
   const countdownTimerRef = useRef(null);
 
   // On mount:
@@ -124,6 +125,7 @@ const MoodCheckIn = ({ onMoodLogged }) => {
   const handleSubmit = async () => {
     if (!selected) return;
     setSaving(true);
+    setErrorMsg('');
     try {
       await logMood(toBackendScore(selected));
       localStorage.setItem(loggedKey(user.id), '1');
@@ -132,8 +134,9 @@ const MoodCheckIn = ({ onMoodLogged }) => {
       setToastVisible(false); // hide toast if it was showing
       if (onMoodLogged) onMoodLogged();
       setTimeout(() => setPopupVisible(false), 1800);
-    } catch {
+    } catch (err) {
       setSaving(false);
+      setErrorMsg(err.response?.data?.message || 'Failed to log mood. Please try again.');
     }
   };
 
@@ -163,7 +166,10 @@ const MoodCheckIn = ({ onMoodLogged }) => {
                     <button
                       key={m.score}
                       className={`mci-emoji-btn ${selected === m.score ? 'selected' : ''}`}
-                      onClick={() => setSelected(m.score)}
+                      onClick={() => {
+                        setSelected(m.score);
+                        setErrorMsg('');
+                      }}
                       type="button"
                     >
                       <span className="mci-emoji">{m.emoji}</span>
@@ -173,6 +179,7 @@ const MoodCheckIn = ({ onMoodLogged }) => {
                 </div>
 
                 <div className="mci-actions">
+                  {errorMsg && <p className="mci-error" style={{ color: '#ef4444', fontSize: '13px', marginBottom: '10px' }}>{errorMsg}</p>}
                   <button
                     className="mci-submit"
                     onClick={handleSubmit}
