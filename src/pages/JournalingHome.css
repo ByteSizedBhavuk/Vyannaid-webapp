@@ -30,10 +30,9 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2rem;
+  padding: 1rem 2rem 3rem 2rem;
   max-width: 900px;
   margin: 0 auto;
-  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 /* ── Hero / Header ──────────────────────────────────────── */
@@ -61,19 +60,38 @@
   letter-spacing: -0.03em;
 }
 
-.jh-hero-subtitle {
-  font-size: 1rem;
-  color: var(--jh-muted);
-  margin: 0;
-  line-height: 1.5;
+.jh-hero-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
 }
 
-.jh-hero-stats {
-  font-size: 0.85rem;
-  font-weight: 500;
+.jh-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.jh-stat-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--jh-primary);
+  line-height: 1;
+}
+
+.jh-stat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
   color: #94a3b8;
-  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   margin-top: 0.25rem;
+}
+
+.jh-stat-divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--jh-border);
 }
 
 .jh-hero-btn {
@@ -98,90 +116,178 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* ── Prompt of the Day (Glassmorphism) ──────────────────── */
-.jh-prompt-card {
+/* ── Prompts Section ────────────────────────────────────── */
+.jh-prompts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Daily Prompt Card (Horizontal Theme) */
+.jh-daily-prompt-card {
   position: relative;
-  border-radius: 20px;
-  padding: 2rem;
-  cursor: pointer;
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
+  background: #111827;
+  /* Dark elegant slate/navy */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  background: #1e293b;
-  color: white;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-.jh-prompt-card:hover {
-  transform: translateY(-4px) scale(1.01);
-}
-
-.jh-prompt-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(20, 27, 40, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
-  z-index: 1;
-}
-
-/* Add a subtle organic gradient blob in the background */
-.jh-prompt-bg::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 70% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%);
-  z-index: 2;
-  transition: transform 0.5s ease;
-}
-
-.jh-prompt-card:hover .jh-prompt-bg::after {
-  transform: scale(1.05) translate(-2%, 2%);
-}
-
-.jh-prompt-content {
+.jh-dp-content {
   position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  flex: 1;
+  max-width: 75%;
 }
 
-.jh-prompt-tag {
+.jh-dp-tag {
   font-size: 0.75rem;
   font-weight: 700;
   color: #94a3b8;
-  letter-spacing: 0.15em;
   text-transform: uppercase;
-  display: inline-block;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
 }
 
-.jh-prompt-text {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: #f1f5f9;
-  margin: 0;
-  line-height: 1.4;
-  font-style: italic;
+.jh-dp-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.3;
+}
+
+.jh-dp-subtext {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
   max-width: 90%;
 }
 
-.jh-prompt-cta {
-  display: flex;
+.jh-dp-cta-btn {
+  align-self: flex-start;
+  display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-  color: #38bdf8;
+  gap: 0.75rem;
+  background: #fff;
+  color: #0f172a;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
   font-weight: 600;
-  margin-top: 0.5rem;
-  transition: transform 0.2s ease;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.jh-prompt-card:hover .jh-prompt-cta {
-  transform: translateX(4px);
+.jh-dp-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.jh-dp-icon-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 2rem;
+}
+
+.jh-dp-icon-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  /* very subtle circle background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  /* muted icon color */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* subtle border */
+}
+
+/* Suggested Prompts Grid/Scroll */
+.jh-suggested-prompts-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.jh-sp-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1a2234;
+  /* Dark solid text for heading */
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.jh-sp-scroll {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 1.5rem;
+  margin-bottom: -1.5rem;
+  /* compensate for padding to not cut off shadows */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.jh-sp-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.jh-sp-card {
+  flex: 0 0 calc(240px);
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.jh-sp-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.jh-sp-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--jh-muted);
+  background: var(--jh-bg);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  align-self: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--jh-border);
+}
+
+.jh-sp-text {
+  font-size: 0.95rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 600;
 }
 
 /* ── Tabs & Content Area ────────────────────────────────── */

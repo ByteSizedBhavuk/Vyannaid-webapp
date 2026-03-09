@@ -177,7 +177,10 @@ const JournalingEditor = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="je-loading">Preparing your journal…</div>
+        <div className="je-loading">
+          <div className="je-loading-spinner"></div>
+          <span>Preparing your space…</span>
+        </div>
       </DashboardLayout>
     );
   }
@@ -186,11 +189,12 @@ const JournalingEditor = () => {
     <DashboardLayout>
       <div className="je-page fade-in">
 
-        {/* ── Top Bar (Floating) ── */}
+        {/* ── Top Bar ── */}
         <header className="je-topbar">
           <div className="je-topbar-left">
             <button className="je-icon-btn" onClick={() => navigate('/dashboard/journaling')} aria-label="Go back">
-              <ArrowLeft size={20} />
+              <ArrowLeft size={18} />
+              <span>Back</span>
             </button>
             <div className="je-meta-info">
               <span className="je-date">{displayDate}</span>
@@ -216,7 +220,7 @@ const JournalingEditor = () => {
           </div>
         </header>
 
-        {/* ── Zen Writing Area ── */}
+        {/* ── Writing Area ── */}
         <div className="je-writing-container">
           <input
             className="je-title-input"
@@ -228,9 +232,11 @@ const JournalingEditor = () => {
 
           {selectedPrompt && !isEdit && (
             <div className="je-prompt-bubble">
-              <div className="je-prompt-icon">✨</div>
+              <div className="je-prompt-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path></svg>
+              </div>
               <div className="je-prompt-content">
-                <span className="je-prompt-label">Daily Prompt</span>
+                <span className="je-prompt-label">Daily Inspiration</span>
                 <p>{selectedPrompt}</p>
               </div>
             </div>

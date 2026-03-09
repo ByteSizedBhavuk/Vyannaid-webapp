@@ -52,12 +52,19 @@ const DashboardLayout = ({ children }) => {
     const isStudent = user?.role === 'student';
 
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(() => {
+        return localStorage.getItem('sidebar-collapsed') === 'true';
+    });
     const [isProfileOpen, setIsProfileOpen] = React.useState(false);
 
+    React.useEffect(() => {
+        localStorage.setItem('sidebar-collapsed', isSidebarCollapsed);
+    }, [isSidebarCollapsed]);
+
     const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
-    const closeSidebar  = () => setIsSidebarOpen(false);
+    const closeSidebar = () => setIsSidebarOpen(false);
     const toggleProfile = () => setIsProfileOpen(prev => !prev);
-    const closeProfile  = () => setIsProfileOpen(false);
+    const closeProfile = () => setIsProfileOpen(false);
 
     return (
         <div className="dashboard-layout">
@@ -66,12 +73,17 @@ const DashboardLayout = ({ children }) => {
                 <div className="sidebar-overlay" onClick={closeSidebar} />
             )}
             {isStudent && (
-                <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+                <Sidebar
+                    isOpen={isSidebarOpen}
+                    isCollapsed={isSidebarCollapsed}
+                    setIsCollapsed={setIsSidebarCollapsed}
+                    closeSidebar={closeSidebar}
+                />
             )}
 
             <ProfileSidebar isOpen={isProfileOpen} onClose={closeProfile} />
 
-            <main className={`dashboard-main${isStudent ? '' : ' no-sidebar'}`}>
+            <main className={`dashboard-main${isStudent ? '' : ' no-sidebar'}${isSidebarCollapsed ? ' collapsed' : ''}`}>
                 <Header toggleSidebar={isStudent ? toggleSidebar : undefined} toggleProfile={toggleProfile} />
                 <div className="dashboard-content-wrapper">
                     {children}

@@ -31,6 +31,8 @@ import ControlledRespiration from "./pages/ControlledRespiration";
 import ProfilePage from "./pages/ProfilePage";
 import JournalingHome from "./pages/JournalingHome";
 import JournalingEditor from "./pages/JournalingEditor";
+import VolunteerApplication from "./pages/VolunteerApplication";
+import VolunteerForm from "./pages/VolunteerForm";
 
 
 
@@ -92,7 +94,17 @@ function App() {
               <ProfilePage />
             </ProtectedRoute>
           } />
-         
+          <Route path="/dashboard/volunteer" element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <VolunteerApplication />
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/volunteer/apply" element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <VolunteerForm />
+            </ProtectedRoute>
+          } />
+
 
           {/* ── Journal ── */}
           <Route path="/dashboard/journaling" element={

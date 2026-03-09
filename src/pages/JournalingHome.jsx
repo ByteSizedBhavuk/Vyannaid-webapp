@@ -12,6 +12,16 @@ const MONTHS = [
 ];
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+const DAILY_PROMPT = "What are three things you are grateful for today?";
+const DAILY_PROMPT_SUB = "Taking a moment to acknowledge the good in your life can significantly boost your mood.";
+
+const SUGGESTED_PROMPTS = [
+  { id: 1, text: "Describe a moment today when you felt fully present." },
+  { id: 2, text: "What is a recent challenge that ended up teaching you a valuable lesson?" },
+  { id: 3, text: "If you could speak to yourself from five years ago, what advice would you give?" },
+  { id: 4, text: "Write about a time you surprised yourself with your own strength." }
+];
+
 function groupByDay(entries) {
   const map = {};
   for (const e of entries) {
@@ -40,6 +50,34 @@ function formatUpdated(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
     ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+}
+
+function calculateStreak(entries) {
+  if (!entries || entries.length === 0) return 0;
+
+  // Get unique dates with entries, sorted descending
+  const dates = [...new Set(entries.map(e => e.createdAt.slice(0, 10)))].sort((a, b) => b.localeCompare(a));
+
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  // If the latest entry isn't today or yesterday, streak is broken
+  if (dates[0] !== today && dates[0] !== yesterday) return 0;
+
+  let streak = 1;
+  for (let i = 0; i < dates.length - 1; i++) {
+    const current = new Date(dates[i]);
+    const next = new Date(dates[i + 1]);
+    const diffTime = Math.abs(current - next);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  return streak;
 }
 
 /* ─── Calendar sub-component ─────────────────────────────── */
@@ -155,6 +193,7 @@ const JournalingHome = () => {
 
   const grouped = groupByDay(entries);
   const totalWords = entries.reduce((sum, e) => sum + (e.wordCount || 0), 0);
+  const streak = calculateStreak(entries);
 
   // Check if an entry already exists for today
   const todayStr = new Date().toISOString().slice(0, 10);
@@ -176,10 +215,22 @@ const JournalingHome = () => {
         <div className="jh-hero">
           <div className="jh-hero-content">
             <h1 className="jh-hero-title">Mindful Journal</h1>
-            <p className="jh-hero-subtitle">
-              Your safe space to reflect, process, and grow.<br />
-              <span className="jh-hero-stats">{entries.length} {entries.length === 1 ? 'entry' : 'entries'} · {totalWords.toLocaleString()} words</span>
-            </p>
+            <div className="jh-hero-stats-bar">
+              <div className="jh-stat-item">
+                <span className="jh-stat-value">{streak}</span>
+                <span className="jh-stat-label">Day Streak</span>
+              </div>
+              <div className="jh-stat-divider"></div>
+              <div className="jh-stat-item">
+                <span className="jh-stat-value">{entries.length}</span>
+                <span className="jh-stat-label">Reflections</span>
+              </div>
+              <div className="jh-stat-divider"></div>
+              <div className="jh-stat-item">
+                <span className="jh-stat-value">{totalWords.toLocaleString()}</span>
+                <span className="jh-stat-label">Words</span>
+              </div>
+            </div>
           </div>
           <button className="jh-hero-btn" onClick={() => handleNewEntry(null)}>
             <Plus size={18} strokeWidth={2.5} />
@@ -187,16 +238,44 @@ const JournalingHome = () => {
           </button>
         </div>
 
-        {/* ── Prompt of the Day (Glassmorphism card) ── */}
-        <div
-          className="jh-prompt-card"
-          onClick={() => handleNewEntry({ selectedPrompt: "How has your perspective on a personal challenge shifted over the past week?" })}
-        >
-          <div className="jh-prompt-bg"></div>
-          <div className="jh-prompt-content">
-            <span className="jh-prompt-tag">Daily Reflection</span>
-            <p className="jh-prompt-text">"How has your perspective on a personal challenge shifted over the past week?"</p>
-            <div className="jh-prompt-cta">Respond thoughtfully <ChevronRight size={14} /></div>
+        {/* ── Daily & Suggested Prompts ── */}
+        <div className="jh-prompts-section">
+          {/* Main Daily Prompt */}
+          <div className="jh-daily-prompt-card">
+            <div className="jh-dp-content">
+              <span className="jh-dp-tag">DAILY INSPIRATION</span>
+              <h2 className="jh-dp-text">{DAILY_PROMPT}</h2>
+              <p className="jh-dp-subtext">{DAILY_PROMPT_SUB}</p>
+
+              <button
+                className="jh-dp-cta-btn"
+                onClick={() => handleNewEntry({ selectedPrompt: DAILY_PROMPT })}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="6" x2="16" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="12" y2="18"></line></svg>
+                <span>Start Writing</span>
+              </button>
+            </div>
+            <div className="jh-dp-icon-wrapper">
+              <div className="jh-dp-icon-circle">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.45.62 2.84 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Suggested Prompts (Horizontal Scroll) */}
+          <div className="jh-suggested-prompts-wrapper">
+            <h3 className="jh-sp-title">DEEP REFLECTIONS</h3>
+            <div className="jh-sp-scroll">
+              {SUGGESTED_PROMPTS.map(p => (
+                <div
+                  key={p.id}
+                  className="jh-sp-card"
+                  onClick={() => handleNewEntry({ selectedPrompt: p.text })}
+                >
+                  <p className="jh-sp-text">{p.text}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
