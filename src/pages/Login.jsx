@@ -6,18 +6,19 @@ import { validateEmail } from "../utils/validators";
 import { Eye, EyeOff } from "lucide-react";
 import "./Login.css";
 
+// Every role must be here. A missing role means navigate(undefined)
+// which lands on "/" → HomeRoute → infinite redirect loop.
 const ROLE_HOME = {
-  admin:   "/dashboard/admin",
-  student: "/dashboard/student",
+  admin:      "/dashboard/admin",
+  counsellor: "/dashboard/counsellor",
+  student:    "/dashboard/student",
 };
 
-// New students (profileComplete === false) go to setup first.
-// Existing students and admins go straight to their dashboard.
 const getDestination = (user) => {
-  if (user.role === 'student' && user.profileComplete === false) {
+  if (user.role === "student" && user.profileComplete === false) {
     return "/profile/setup";
   }
-  return ROLE_HOME[user.role] || "/dashboard/student";
+  return ROLE_HOME[user.role] ?? "/login";
 };
 
 const Login = () => {
@@ -40,7 +41,6 @@ const Login = () => {
     try {
       const res = await loginUser(form);
       const { token, user } = res.data;
-
       login({ ...user, token });
       navigate(getDestination(user), { replace: true });
     } catch (err) {

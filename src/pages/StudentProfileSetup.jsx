@@ -12,7 +12,6 @@ const AVATAR_COLORS = [
 
 const UNIVERSITIES = [
   { id: 'university-a', name: 'University A', location: 'Main Campus' },
-  // Future universities will be added here by admin
 ];
 
 const COURSES = [
@@ -41,12 +40,12 @@ const StudentProfileSetup = () => {
   const { user, updateUser } = useAuth();
   const navigate = useNavigate();
 
-  const [step,   setStep]   = useState(1); // 1 = welcome, 2 = academic, 3 = personal
+  const [step,   setStep]   = useState(1);
   const [saving, setSaving] = useState(false);
   const [error,  setError]  = useState('');
 
   const [form, setForm] = useState({
-    institution:     'University A',          // pre-selected, read-only
+    institution:     'University A',
     course:          '',
     courseStartYear: String(new Date().getFullYear()),
     name:            user?.name || '',
@@ -56,7 +55,6 @@ const StudentProfileSetup = () => {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  /* ── Validation per step ── */
   const canProceed = () => {
     if (step === 1) return true;
     if (step === 2) return form.course.trim() !== '' && form.courseStartYear !== '';
@@ -64,7 +62,11 @@ const StudentProfileSetup = () => {
     return false;
   };
 
-  /* ── Submit on final step ── */
+  const next = () => {
+    if (step < 3) { setStep(s => s + 1); return; }
+    handleSubmit();
+  };
+
   const handleSubmit = async () => {
     if (!canProceed()) return;
     setSaving(true);
@@ -80,12 +82,23 @@ const StudentProfileSetup = () => {
       });
 
       const d = res.data.data;
+
+      // ─── CRITICAL FIX ───────────────────────────────────────────
+      // Must set profileComplete: true here so ProtectedRoute stops
+      // redirecting this student back to /profile/setup on every render.
+      // Without this, the student would loop:
+      //   /dashboard/student → ProtectedRoute sees profileComplete=false
+      //   → /profile/setup → SetupRoute sees profileComplete=false → renders
+      //   → student submits → navigate('/dashboard/student')
+      //   → ProtectedRoute sees profileComplete=false (still!) → loop
+      // ────────────────────────────────────────────────────────────
       updateUser({
         name:            d.name,
         avatarColor:     d.avatarColor,
         institution:     d.institution,
         course:          d.course,
         courseStartYear: d.courseStartYear,
+        profileComplete: true,   // ← unlocks all student routes
       });
 
       navigate('/dashboard/student', { replace: true });
@@ -95,51 +108,28 @@ const StudentProfileSetup = () => {
     }
   };
 
-  const next = () => {
-    if (!canProceed()) return;
-    if (step < 3) setStep(s => s + 1);
-    else handleSubmit();
-  };
-
-  /* ── Step indicators ── */
-  const STEPS = ['Welcome', 'Academic', 'Personal'];
-
   return (
     <div className="sps-page">
-
-      {/* Background decoration */}
-      <div className="sps-bg-blob sps-blob-1" />
-      <div className="sps-bg-blob sps-blob-2" />
-
       <div className="sps-card">
 
-        {/* Step indicator */}
-        <div className="sps-steps">
-          {STEPS.map((label, i) => (
-            <React.Fragment key={label}>
-              <div className={`sps-step-dot ${step > i + 1 ? 'done' : step === i + 1 ? 'active' : ''}`}>
-                {step > i + 1 ? <Check size={12} strokeWidth={3} /> : i + 1}
-              </div>
-              {i < STEPS.length - 1 && (
-                <div className={`sps-step-line ${step > i + 1 ? 'done' : ''}`} />
-              )}
-            </React.Fragment>
+        {/* Progress dots */}
+        <div className="sps-progress">
+          {[1, 2, 3].map(n => (
+            <div key={n} className={`sps-dot ${step >= n ? 'active' : ''}`} />
           ))}
         </div>
 
         {/* ── Step 1: Welcome ── */}
         {step === 1 && (
           <div className="sps-step-content">
-            <div className="sps-icon-wrap sps-icon-indigo">
+            <div className="sps-icon-wrap sps-icon-purple">
               <Sparkles size={28} />
             </div>
-            <h1 className="sps-title">Welcome to Vyannaid</h1>
+            <h1 className="sps-title">Welcome to Vyannaid!</h1>
             <p className="sps-subtitle">
-              Hi <strong>{user?.name?.split(' ')[0] || 'there'}</strong>! Before we take you to your
-              dashboard, let's set up your student profile. It takes less than a minute and helps us
-              personalise your experience.
+              Before we take you to your dashboard, let's set up your student profile.
+              It takes less than a minute and helps us personalise your experience.
             </p>
-
             <div className="sps-welcome-list">
               <div className="sps-wl-item">
                 <div className="sps-wl-icon"><GraduationCap size={18} /></div>
@@ -175,7 +165,6 @@ const StudentProfileSetup = () => {
             <h1 className="sps-title">Your Academic Details</h1>
             <p className="sps-subtitle">This helps us connect you with the right counsellor and community.</p>
 
-            {/* University — locked to University A */}
             <div className="sps-field">
               <label className="sps-label">University</label>
               <div className="sps-university-card">
@@ -189,7 +178,6 @@ const StudentProfileSetup = () => {
               <p className="sps-field-hint">More universities will be added soon.</p>
             </div>
 
-            {/* Course */}
             <div className="sps-field">
               <label className="sps-label">Course / Programme <span className="sps-req">*</span></label>
               <select
@@ -202,7 +190,6 @@ const StudentProfileSetup = () => {
               </select>
             </div>
 
-            {/* Year started */}
             <div className="sps-field">
               <label className="sps-label">
                 <Calendar size={14} /> Year you started <span className="sps-req">*</span>
@@ -234,7 +221,6 @@ const StudentProfileSetup = () => {
             <h1 className="sps-title">Almost Done!</h1>
             <p className="sps-subtitle">Add a personal touch to your profile.</p>
 
-            {/* Avatar preview */}
             <div className="sps-avatar-row">
               <div className="sps-avatar" style={{ background: form.avatarColor }}>
                 {getInitials(form.name)}
@@ -254,7 +240,6 @@ const StudentProfileSetup = () => {
               </div>
             </div>
 
-            {/* Name */}
             <div className="sps-field">
               <label className="sps-label">Full Name <span className="sps-req">*</span></label>
               <input
@@ -266,7 +251,6 @@ const StudentProfileSetup = () => {
               />
             </div>
 
-            {/* Bio */}
             <div className="sps-field">
               <label className="sps-label">Short Bio <span className="sps-opt">(optional)</span></label>
               <textarea
@@ -274,13 +258,12 @@ const StudentProfileSetup = () => {
                 value={form.bio}
                 rows={2}
                 maxLength={300}
-                placeholder="A short note about yourself… e.g. 'Final year psychology student, love hiking.'"
+                placeholder="A short note about yourself…"
                 onChange={e => set('bio', e.target.value)}
               />
               <span className="sps-count">{form.bio.length} / 300</span>
             </div>
 
-            {/* Summary */}
             <div className="sps-summary">
               <div className="sps-summary-row">
                 <GraduationCap size={14} />
@@ -298,7 +281,7 @@ const StudentProfileSetup = () => {
           </div>
         )}
 
-        {/* ── Footer actions ── */}
+        {/* ── Footer ── */}
         <div className="sps-footer">
           {step > 1 && (
             <button className="sps-back-btn" onClick={() => setStep(s => s - 1)} disabled={saving}>

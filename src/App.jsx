@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
@@ -33,14 +33,14 @@ import VolunteerForm from "./pages/VolunteerForm";
 import CalmMusic from "./pages/CalmMusic";
 
 // ── Counsellor pages ─────────────────────────────────────────────
-import CounsellorOverview    from "./pages/CounsellorOverview";
-import CounsellorStudents    from "./pages/CounsellorStudents";
-import CounsellorSessions    from "./pages/CounsellorSessions";
-import CounsellorNotes       from "./pages/CounsellorNotes";
-import CounsellorAnalytics   from "./pages/CounsellorAnalytics";
-import CounsellorMessages    from "./pages/CounsellorMessages";
-import CounsellorResources   from "./pages/CounsellorResources";
-import CounsellorSettings    from "./pages/CounsellorSettings";
+import CounsellorOverview  from "./pages/CounsellorOverview";
+import CounsellorStudents  from "./pages/CounsellorStudents";
+import CounsellorSessions  from "./pages/CounsellorSessions";
+import CounsellorNotes     from "./pages/CounsellorNotes";
+import CounsellorAnalytics from "./pages/CounsellorAnalytics";
+import CounsellorMessages  from "./pages/CounsellorMessages";
+import CounsellorResources from "./pages/CounsellorResources";
+import CounsellorSettings  from "./pages/CounsellorSettings";
 
 // ── Admin pages ──────────────────────────────────────────────────
 import AdminOverview    from "./pages/AdminOverview";
@@ -48,18 +48,17 @@ import AdminUsers       from "./pages/AdminUsers";
 import AdminAssign      from "./pages/AdminAssign";
 import AdminCreateStaff from "./pages/AdminCreateStaff";
 
-// ────────────────────────────────────────────────────────────────
-// Role → home path mapping.
-// Every possible role MUST be listed here.
-// If a role is missing, ProtectedRoute falls back to "/login".
-// ────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// ROLE_HOME — canonical landing page per role.
+// Every role MUST be listed. Missing role → navigate undefined → loop.
+// ─────────────────────────────────────────────────────────────────
 const ROLE_HOME = {
   admin:      "/dashboard/admin",
   counsellor: "/dashboard/counsellor",
   student:    "/dashboard/student",
 };
 
-// ── Guard components ─────────────────────────────────────────────
+// ── Guard components ──────────────────────────────────────────────
 
 const Home = () => (
   <>
@@ -70,16 +69,22 @@ const Home = () => (
   </>
 );
 
-/** "/" — show landing for guests, redirect to role home for authenticated users */
+/**
+ * HomeRoute — "/"
+ * Guests see the landing page.
+ * Authenticated users go to their role home.
+ */
 const HomeRoute = () => {
   const { user, isAuthenticated, loading } = useAuth();
   if (loading) return null;
   if (!isAuthenticated) return <Home />;
-  // Use login to known role path; fallback to login so there's never a loop
   return <Navigate to={ROLE_HOME[user.role] ?? "/login"} replace />;
 };
 
-/** Public-only pages (login / register) — redirect authenticated users home */
+/**
+ * GuestOnly — wraps /login and /register.
+ * Authenticated users are redirected away immediately.
+ */
 const GuestOnly = ({ children }) => {
   const { user, isAuthenticated, loading } = useAuth();
   if (loading) return null;
@@ -87,19 +92,34 @@ const GuestOnly = ({ children }) => {
   return <Navigate to={ROLE_HOME[user.role] ?? "/login"} replace />;
 };
 
-/** /profile/setup guard — students only, skip if already complete */
+/**
+ * SetupRoute — wraps /profile/setup.
+ *
+ * Rules:
+ *  - Not logged in         → /login
+ *  - Not a student         → their ROLE_HOME (admin/counsellor never need setup)
+ *  - profileComplete=true  → /dashboard/student  (already done, skip)
+ *  - Otherwise             → show the setup page
+ *
+ * Deliberately does NOT check institution/course strings — that was the
+ * source of the bounce loop when those were filled but profileComplete
+ * was still false.
+ */
 const SetupRoute = ({ children }) => {
   const { user, isAuthenticated, loading } = useAuth();
   if (loading) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user.role !== "student") return <Navigate to={ROLE_HOME[user.role] ?? "/login"} replace />;
-  if (user.institution?.trim() && user.course?.trim()) {
+  if (user.role !== "student") {
+    return <Navigate to={ROLE_HOME[user.role] ?? "/login"} replace />;
+  }
+  // profileComplete undefined or true → already done
+  if (user.profileComplete !== false) {
     return <Navigate to="/dashboard/student" replace />;
   }
   return children;
 };
 
-// ── App ──────────────────────────────────────────────────────────
+// ── App ───────────────────────────────────────────────────────────
 
 function App() {
   return (
@@ -215,7 +235,7 @@ function App() {
             <ProtectedRoute allowedRoles={["admin"]}><AdminCreateStaff /></ProtectedRoute>
           } />
 
-          {/* ── Catch-all: authenticated → role home, guest → landing ── */}
+          {/* ── Catch-all ── */}
           <Route path="*" element={<HomeRoute />} />
 
         </Routes>
