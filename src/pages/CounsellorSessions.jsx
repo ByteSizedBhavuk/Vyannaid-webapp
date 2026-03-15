@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   CalendarDays, Plus, Clock, ChevronLeft, ChevronRight,
-  CheckCircle2, XCircle, AlertCircle, Edit3, Trash2
+  CheckCircle2, XCircle, AlertCircle, Edit3, Trash2, Video
 } from 'lucide-react';
 import CounsellorLayout from '../components/CounsellorDashboard/CounsellorLayout';
 import {
@@ -17,7 +18,7 @@ const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS = ['January','February','March','April','May','June',
                 'July','August','September','October','November','December'];
 
-/* ── Status icon ────────────────────────────────────────── */
+/* ── Status icon ────────────────────────────────────────────── */
 const StatusIcon = ({ status }) => {
   if (status === 'completed') return <CheckCircle2 size={15} className="si-green"  />;
   if (status === 'cancelled') return <XCircle      size={15} className="si-red"    />;
@@ -25,7 +26,7 @@ const StatusIcon = ({ status }) => {
   return <Clock size={15} className="si-blue" />;
 };
 
-/* ── Mini calendar ──────────────────────────────────────── */
+/* ── Mini calendar ──────────────────────────────────────────── */
 const MiniCalendar = ({ sessions, onDayClick, selectedDate }) => {
   const [cur, setCur] = useState(new Date());
   const year  = cur.getFullYear();
@@ -74,7 +75,7 @@ const MiniCalendar = ({ sessions, onDayClick, selectedDate }) => {
   );
 };
 
-/* ── Session form modal ─────────────────────────────────── */
+/* ── Session form modal ─────────────────────────────────────── */
 const SessionModal = ({ students, initial, onSave, onClose }) => {
   const [form, setForm] = useState(
     initial
@@ -99,7 +100,6 @@ const SessionModal = ({ students, initial, onSave, onClose }) => {
           <h3>{initial ? 'Edit Session' : 'Schedule New Session'}</h3>
           <button onClick={onClose}><XCircle size={20} /></button>
         </div>
-
         <div className="sm-body">
           <label className="sm-label">Student</label>
           <select className="sm-select" value={form.studentId} onChange={e => set('studentId', e.target.value)}>
@@ -132,7 +132,6 @@ const SessionModal = ({ students, initial, onSave, onClose }) => {
           <textarea className="sm-textarea" rows={3} placeholder="Pre-session notes…"
             value={form.notes} onChange={e => set('notes', e.target.value)} />
         </div>
-
         <div className="sm-footer">
           <button className="sm-cancel" onClick={onClose}>Cancel</button>
           <button className="sm-save" onClick={handleSubmit} disabled={saving}>
@@ -144,8 +143,10 @@ const SessionModal = ({ students, initial, onSave, onClose }) => {
   );
 };
 
-/* ── Main page ──────────────────────────────────────────── */
+/* ── Main page ──────────────────────────────────────────────── */
 const CounsellorSessions = () => {
+  const navigate = useNavigate();
+
   const [sessions,     setSessions] = useState([]);
   const [students,     setStudents] = useState([]);
   const [loading,      setLoading]  = useState(true);
@@ -181,14 +182,12 @@ const CounsellorSessions = () => {
     load();
   };
 
-  // Soft-cancel — sets status to 'cancelled' on backend
   const handleDelete = async (id) => {
     if (!window.confirm('Cancel this session?')) return;
     try { await deleteSession(id); showToast('Session cancelled.'); load(); }
     catch { showToast('Failed to cancel.'); }
   };
 
-  // Mark a scheduled session as completed
   const handleComplete = async (id) => {
     try {
       await updateSession(id, { status: 'completed' });
@@ -197,6 +196,10 @@ const CounsellorSessions = () => {
     } catch {
       showToast('Failed to update session.');
     }
+  };
+
+  const handleJoin = (sessionId) => {
+    navigate(`/call/${sessionId}`);
   };
 
   const displayed = sessions.filter(s => {
@@ -295,7 +298,20 @@ const CounsellorSessions = () => {
                     <div className="css-sc-actions">
                       <span className={`css-pill css-pill-${s.status}`}>{s.status}</span>
 
-                      {/* Mark as complete — only for scheduled sessions */}
+                      {/* Join Call — video/phone + scheduled only */}
+                      {s.status === 'scheduled' &&
+                       (s.type === 'video' || s.type === 'phone') &&
+                       new Date(s.scheduledAt) > new Date() && (
+                        <button
+                          className="css-icon-btn css-icon-indigo"
+                          title="Join call"
+                          onClick={() => handleJoin(s._id)}
+                        >
+                          <Video size={14} />
+                        </button>
+                      )}
+
+                      {/* Mark as complete — scheduled only */}
                       {s.status === 'scheduled' && (
                         <button
                           className="css-icon-btn css-icon-green"

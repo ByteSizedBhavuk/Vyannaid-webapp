@@ -48,6 +48,11 @@ import AdminUsers       from "./pages/AdminUsers";
 import AdminAssign      from "./pages/AdminAssign";
 import AdminCreateStaff from "./pages/AdminCreateStaff";
 
+// ── Video / Voice call ─────────────────────────────────────────
+// Accessible to both students AND counsellors
+import VideoCall from "./pages/VideoCall";
+
+
 // ─────────────────────────────────────────────────────────────────
 // ROLE_HOME — canonical landing page per role.
 // Every role MUST be listed. Missing role → navigate undefined → loop.
@@ -138,6 +143,18 @@ function App() {
           <Route path="/profile/setup" element={
             <SetupRoute><StudentProfileSetup /></SetupRoute>
           } />
+          
+            {/* ════════════════════════════════════════════════════ */}
+          {/*  VIDEO / VOICE CALL                                  */}
+          {/*  /call/:sessionId — sessionId is MongoDB Session._id */}
+          {/*  Both student and counsellor can join the same room   */}
+          {/* ════════════════════════════════════════════════════ */}
+          <Route path="/call/:sessionId" element={
+            <ProtectedRoute allowedRoles={["student", "counsellor"]}>
+              <VideoCall />
+            </ProtectedRoute>
+          } />
+
 
           {/* ════════════════════════════════════ */}
           {/*  STUDENT ROUTES                      */}
