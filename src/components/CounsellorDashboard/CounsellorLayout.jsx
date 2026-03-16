@@ -53,7 +53,14 @@ const CounsellorLayout = ({ children }) => {
           toggleSidebar={() => setIsSidebarOpen(p => !p)}
           toggleProfile={() => setIsProfileOpen(p => !p)}
         />
-        <div className="cl-content" style={{ flex: 1, overflowY: 'auto', padding: '2.5rem' }}>
+        <div 
+          className="cl-content" 
+          style={{ 
+            flex: 1, 
+            overflowY: location.pathname.includes('/messages') ? 'hidden' : 'auto', 
+            padding: location.pathname.includes('/messages') ? '0' : '2.5rem' 
+          }}
+        >
           {children}
         </div>
       </main>

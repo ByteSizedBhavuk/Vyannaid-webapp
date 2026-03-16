@@ -13,7 +13,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Send, MessageSquare, Search, CheckCheck, X } from 'lucide-react';
+import { Send, MessageSquare, Search, CheckCheck, X, Phone, Video, Info, Plus, Smile, Paperclip, MoreHorizontal } from 'lucide-react';
 import CounsellorLayout from '../components/CounsellorDashboard/CounsellorLayout';
 import { useAuth } from '../auth/AuthContext';
 import { getSocket } from '../api/socketClient';
@@ -34,11 +34,15 @@ const formatTime = (iso) => {
 };
 
 /* ── Thread item ──────────────────────────────────────────────── */
-const ThreadItem = ({ student, active, unread, lastMsg, lastAt, onClick }) => (
+const ThreadItem = ({ student, active, unread, lastMsg, lastAt, isOnline, onClick }) => (
   <div className={`cm-thread ${active ? 'cm-thread-active' : ''}`} onClick={onClick}>
-    <div className="cm-thread-avatar">
-      {initials(student.name)}
-      {unread > 0 && <span className="cm-unread-dot" />}
+    <div className="cm-thread-avatar-wrap">
+      <img 
+        src={student.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=random`} 
+        alt={student.name} 
+        className="cm-thread-avatar" 
+      />
+      {isOnline && <span className="cm-status-indicator cm-status-online" />}
     </div>
     <div className="cm-thread-info">
       <div className="cm-thread-top">
@@ -46,26 +50,32 @@ const ThreadItem = ({ student, active, unread, lastMsg, lastAt, onClick }) => (
         <span className="cm-thread-time">{formatTime(lastAt)}</span>
       </div>
       <div className="cm-thread-preview">
-        <span className={`cm-thread-last ${unread > 0 ? 'cm-thread-bold' : ''}`}>
+        <span className="cm-thread-last">
           {lastMsg || 'No messages yet'}
         </span>
-        {unread > 0 && <span className="cm-unread-badge">{unread > 9 ? '9+' : unread}</span>}
+        {unread > 0 && <span className="cm-unread-dot-indicator" />}
       </div>
     </div>
   </div>
 );
 
 /* ── Message bubble ───────────────────────────────────────────── */
-const Bubble = ({ msg, isMine }) => (
-  <div className={`cm-bubble-wrap ${isMine ? 'cm-mine' : 'cm-theirs'}`}>
-    {!isMine && <span className="cm-bubble-name">{msg.senderName}</span>}
-    <div className={`cm-bubble ${isMine ? 'cm-bubble-mine' : 'cm-bubble-theirs'}`}>
-      {msg.text}
+const Bubble = ({ msg, isMine, peerAvatar }) => (
+  <div className={`cm-bubble-container ${isMine ? 'cm-mine-container' : 'cm-theirs-container'}`}>
+    <img 
+      src={isMine ? 'https://ui-avatars.com/api/?name=Counsellor&background=1a2234&color=fff' : (peerAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.senderName)}&background=f1f5f9`)} 
+      alt="avatar" 
+      className="cm-bubble-avatar" 
+    />
+    <div className={`cm-bubble-wrap ${isMine ? 'cm-mine' : 'cm-theirs'}`}>
+      <div className={`cm-bubble ${isMine ? 'cm-bubble-mine' : 'cm-bubble-theirs'}`}>
+        {msg.text}
+      </div>
+      <div className="cm-bubble-footer">
+        {formatTime(msg.createdAt || msg.timestamp)}
+        {isMine && <CheckCheck size={14} className="cm-read-tick" />}
+      </div>
     </div>
-    <span className="cm-bubble-time">
-      {formatTime(msg.createdAt || msg.timestamp)}
-      {isMine && <CheckCheck size={11} className="cm-read-icon" />}
-    </span>
   </div>
 );
 
@@ -80,6 +90,7 @@ const CounsellorMessages = () => {
   const [messages,  setMessages]  = useState([]);
   const [input,     setInput]     = useState('');
   const [search,    setSearch]    = useState('');
+  const [activeTab,  setActiveTab] = useState('ALL');
   const [sideLoad,  setSideLoad]  = useState(true);
   const [msgLoad,   setMsgLoad]   = useState(false);
   const [typing,    setTyping]    = useState(false);
@@ -249,17 +260,30 @@ const CounsellorMessages = () => {
         {/* Left: thread list */}
         <div className="cm-sidebar">
           <div className="cm-sidebar-header">
-            <h2 className="cm-sidebar-title"><MessageSquare size={18} /> Messages</h2>
+            <h2 className="cm-sidebar-title">Conversations</h2>
+            <button className="cm-new-chat-btn"><Plus size={18} /></button>
           </div>
 
           <div className="cm-search-wrap">
-            <Search size={14} className="cm-search-icon" />
+            <Search size={18} className="cm-search-icon" />
             <input
               className="cm-search"
-              placeholder="Search students…"
+              placeholder="Search student or message..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
+          </div>
+
+          <div className="cm-tabs">
+            {['ALL', 'UNREAD', 'ARCHIVED'].map(tab => (
+              <button 
+                key={tab} 
+                className={`cm-tab ${activeTab === tab ? 'cm-tab-active' : ''}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
           <div className="cm-thread-list">
@@ -298,20 +322,29 @@ const CounsellorMessages = () => {
           ) : (
             <>
               <div className="cm-chat-header">
-                <div className="cm-chat-avatar">{initials(activeStudent?.name)}</div>
+                <img 
+                  src={activeStudent?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(activeStudent?.name || 'Student')}&background=random`} 
+                  className="cm-chat-avatar" 
+                  alt="avatar" 
+                />
                 <div className="cm-chat-peer-info">
                   <span className="cm-chat-peer-name">{activeStudent?.name}</span>
-                  <span className="cm-chat-peer-sub">
-                    {activeStudent?.email}
+                  <span className="cm-chat-status">
+                    Online
                     {typing && <span className="cm-typing-text"> · typing…</span>}
                   </span>
                 </div>
-                <button className="cm-close-chat" onClick={() => setActiveId(null)} title="Close">
-                  <X size={16} />
-                </button>
+                <div className="cm-chat-header-actions">
+                  <button className="cm-header-action-btn"><Phone size={20} /></button>
+                  <button className="cm-header-action-btn"><Video size={20} /></button>
+                  <button className="cm-header-action-btn"><Info size={20} /></button>
+                </div>
               </div>
 
               <div className="cm-messages">
+                <div className="cm-date-divider">
+                  <span className="cm-date-text">Today</span>
+                </div>
                 {msgLoad ? (
                   <div className="cm-msg-state">Loading messages…</div>
                 ) : messages.length === 0 && !sending ? (
@@ -324,6 +357,7 @@ const CounsellorMessages = () => {
                     <Bubble
                       key={m._id || i}
                       msg={m}
+                      peerAvatar={activeStudent?.avatar}
                       isMine={
                         m.senderId?.toString() === user?.id ||
                         m.senderRole === 'counsellor'
@@ -343,20 +377,27 @@ const CounsellorMessages = () => {
                 <div ref={bottomRef} />
               </div>
 
-              <form className="cm-input-row" onSubmit={send}>
-                <input
-                  ref={inputRef}
-                  className="cm-input"
-                  placeholder={`Message ${activeStudent?.name?.split(' ')[0] || 'student'}…`}
-                  value={input}
-                  onChange={handleInputChange}
-                  onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send(e)}
-                  disabled={sending}
-                />
-                <button type="submit" className="cm-send-btn" disabled={!input.trim() || sending}>
-                  <Send size={16} />
-                </button>
-              </form>
+              <div className="cm-input-area">
+                <form className="cm-input-box" onSubmit={send}>
+                  <button type="button" className="cm-input-action-btn"><Plus size={20} /></button>
+                  <button type="button" className="cm-input-action-btn"><Smile size={20} /></button>
+                  <input
+                    ref={inputRef}
+                    className="cm-input"
+                    placeholder="Type your message..."
+                    value={input}
+                    onChange={handleInputChange}
+                    onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send(e)}
+                    disabled={sending}
+                  />
+                  <div className="cm-input-actions">
+                    <button type="button" className="cm-input-action-btn"><Paperclip size={20} /></button>
+                    <button type="submit" className="cm-send-btn" disabled={!input.trim() || sending}>
+                      <Send size={22} fill="white" />
+                    </button>
+                  </div>
+                </form>
+              </div>
             </>
           )}
         </div>
