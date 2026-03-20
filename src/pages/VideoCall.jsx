@@ -73,6 +73,9 @@ const VideoCall = () => {
   const [peerInfo,    setPeerInfo]    = useState(null);
   const [mediaErr,    setMediaErr]    = useState('');
   const [unread,      setUnread]      = useState(0);
+
+  const candidateQueueRef = useRef([]); // Queued candidates (arrived before remote description)
+
   const [turnLoading, setTurnLoading] = useState(true);
   const [sessionInfo, setSessionInfo] = useState(null);
   const [countdown,   setCountdown]   = useState(null);
@@ -179,11 +182,22 @@ const VideoCall = () => {
       if (e.candidate) socket.emit('ice-candidate', { roomId: sessionId, candidate: e.candidate });
     };
 
-    pc.onconnectionstatechange = () => {
-      console.log('[WebRTC] Connection state:', pc.connectionState);
-      if (pc.connectionState === 'connected')  setStatus('live');
-      if (['disconnected', 'failed'].includes(pc.connectionState)) setStatus('ended');
+    pc.oniceconnectionstatechange = () => {
+      console.log(`[WebRTC] ICE state: ${pc.iceConnectionState}`);
     };
+
+    pc.onconnectionstatechange = () => {
+      const state = pc.connectionState;
+      console.log(`[WebRTC] Connection state: ${state}`);
+      
+      if (state === 'connected') {
+        setStatus('live');
+      } else if (state === 'failed') {
+        setStatus('ended');
+      }
+      // Note: 'disconnected' is ignored as it can be transient
+    };
+
 
     return pc;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -232,27 +246,62 @@ const VideoCall = () => {
       socket.emit('offer', { roomId: sessionId, sdp: offer });
     };
 
+    const processQueuedCandidates = async (pConnection) => {
+      while (candidateQueueRef.current.length > 0) {
+        const cand = candidateQueueRef.current.shift();
+        try {
+          await pConnection.addIceCandidate(new RTCIceCandidate(cand));
+          console.log('[WebRTC] Processed queued candidate');
+        } catch (e) {
+          console.warn('[WebRTC] Queued ICE add error:', e);
+        }
+      }
+    };
+
     const onOffer = async ({ sdp }) => {
       console.log('[WebRTC] Received offer → answering');
       pc = createPC(); pcRef.current = pc;
       stream.getTracks().forEach(t => pc.addTrack(t, stream));
-      await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-      const answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
-      socket.emit('answer', { roomId: sessionId, sdp: answer });
-      setStatus('live');
+      
+      try {
+        await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+        await processQueuedCandidates(pc);
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        socket.emit('answer', { roomId: sessionId, sdp: answer });
+      } catch (err) {
+        console.error('[WebRTC] Error handling offer:', err);
+      }
     };
 
     const onAnswer = async ({ sdp }) => {
       console.log('[WebRTC] Received answer');
-      await pcRef.current?.setRemoteDescription(new RTCSessionDescription(sdp));
-      setStatus('live');
+      try {
+        await pcRef.current?.setRemoteDescription(new RTCSessionDescription(sdp));
+        if (pcRef.current) await processQueuedCandidates(pcRef.current);
+      } catch (err) {
+        console.error('[WebRTC] Error handling answer:', err);
+      }
     };
 
     const onIceCandidate = async ({ candidate }) => {
-      try { await pcRef.current?.addIceCandidate(new RTCIceCandidate(candidate)); }
-      catch (e) { console.warn('[WebRTC] ICE add error:', e); }
+      if (!candidate) return;
+      const connection = pcRef.current;
+      
+      // If we don't have a remote description yet, queue the candidate
+      if (!connection || !connection.remoteDescription) {
+        console.log('[WebRTC] Queuing ICE candidate (remote description not set)');
+        candidateQueueRef.current.push(candidate);
+        return;
+      }
+
+      try {
+        await connection.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (e) {
+        console.warn('[WebRTC] ICE add error:', e);
+      }
     };
+
 
     const onPeerLeft = () => {
       remoteStrmRef.current = null;
