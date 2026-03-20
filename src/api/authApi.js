@@ -5,7 +5,12 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 // Shared axios instance — all requests get the Bearer token automatically
 export const api = axios.create({
   baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    // Tells ngrok free tier to skip its browser warning interstitial page.
+    // Safe to include always — non-ngrok servers ignore unknown headers.
+    "ngrok-skip-browser-warning": "true",
+  },
 });
 
 api.interceptors.request.use((req) => {
