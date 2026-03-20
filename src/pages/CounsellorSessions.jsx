@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  CalendarDays, Plus, Clock, ChevronLeft, ChevronRight,
+  CalendarDays, Calendar, Plus, Clock, ChevronLeft, ChevronRight,
   CheckCircle2, XCircle, AlertCircle, Edit3, Trash2, Video
 } from 'lucide-react';
 import CounsellorLayout from '../components/CounsellorDashboard/CounsellorLayout';
@@ -75,21 +75,84 @@ const MiniCalendar = ({ sessions, onDayClick, selectedDate }) => {
   );
 };
 
+/* ── Custom Time Picker ─────────────────────────────────────── */
+const CustomTimePicker = ({ value, onChange }) => {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const times = useMemo(() => {
+    const t = [];
+    for(let i=0; i<24; i++) {
+      for(let j=0; j<60; j+=15) {
+        t.push(`${String(i).padStart(2,'0')}:${String(j).padStart(2,'0')}`);
+      }
+    }
+    return t;
+  }, []);
+
+  // Scroll to selected on open
+  useEffect(() => {
+    if (open && value && containerRef.current) {
+      const el = containerRef.current.querySelector('.selected');
+      if (el) el.scrollIntoView({ block: 'center' });
+    }
+  }, [open, value]);
+
+  return (
+    <div className="time-picker-wrapper" ref={containerRef}>
+      <div className="sm-input time-picker-trigger" onClick={() => setOpen(!open)}>
+        {value || <span className="placeholder">Select</span>}
+      </div>
+      {open && (
+        <div className="time-picker-popup">
+          {times.map(t => (
+            <div 
+              key={t} 
+              className={`time-picker-item ${value === t ? 'selected' : ''}`}
+              onClick={() => { onChange(t); setOpen(false); }}
+            >
+              {t}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 /* ── Session form modal ─────────────────────────────────────── */
-const SessionModal = ({ students, initial, onSave, onClose }) => {
+const SessionModal = ({ students, initial, onSave, onClose, showToast }) => {
+  const initDate = initial?.scheduledAt ? initial.scheduledAt.split('T')[0] : '';
+  const initTime = initial?.scheduledAt ? initial.scheduledAt.split('T')[1]?.slice(0, 5) : '';
+
+  const [dateStr, setDateStr] = useState(initDate);
+  const [timeStr, setTimeStr] = useState(initTime);
+
   const [form, setForm] = useState(
     initial
-      ? { ...initial, scheduledAt: initial.scheduledAt?.slice(0, 16) || '' }
-      : { studentId: '', scheduledAt: '', durationMinutes: 50, type: 'video', notes: '' }
+      ? { ...initial }
+      : { studentId: '', durationMinutes: 50, type: 'video', notes: '' }
   );
   const [saving, setSaving] = useState(false);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const handleSubmit = async () => {
-    if (!form.studentId || !form.scheduledAt) return;
+    if (!form.studentId || !dateStr || !timeStr) {
+      if (showToast) showToast('Please select a student, date, and time.');
+      return;
+    }
+    const scheduledAt = `${dateStr}T${timeStr}`;
     setSaving(true);
-    try { await onSave(form); onClose(); }
-    catch { /* toast handled in parent */ }
+    try { await onSave({ ...form, scheduledAt }); onClose(); }
+    catch (err) { if (showToast) showToast(err?.response?.data?.message || 'Error saving session.'); }
     finally { setSaving(false); }
   };
 
@@ -107,9 +170,23 @@ const SessionModal = ({ students, initial, onSave, onClose }) => {
             {students.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
           </select>
 
-          <label className="sm-label">Date & Time</label>
-          <input className="sm-input" type="datetime-local" value={form.scheduledAt}
-            onChange={e => set('scheduledAt', e.target.value)} />
+          <div className="sm-row">
+            <div>
+              <label className="sm-label">Date</label>
+              <div className="sm-input-group">
+                <div className="sm-input-icon"><Calendar size={16} /></div>
+                <input className="sm-input" type="date" value={dateStr}
+                  onChange={e => setDateStr(e.target.value)} />
+              </div>
+            </div>
+            <div>
+              <label className="sm-label">Time</label>
+              <div className="sm-input-group">
+                <div className="sm-input-icon"><Clock size={16} /></div>
+                <CustomTimePicker value={timeStr} onChange={setTimeStr} />
+              </div>
+            </div>
+          </div>
 
           <div className="sm-row">
             <div>
@@ -351,6 +428,7 @@ const CounsellorSessions = () => {
           initial={editItem}
           onSave={handleSave}
           onClose={() => setModal(false)}
+          showToast={showToast}
         />
       )}
     </CounsellorLayout>

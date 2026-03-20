@@ -1,38 +1,37 @@
 /**
- * src/pages/VideoCall.jsx  ── BUG-FIXED
+ * src/pages/VideoCall.jsx  ── UPDATED with Cloudflare TURN
  *
- * Bugs fixed:
- *  1. socket obtained inside useEffect (not at render level) — prevents stale
- *     socket reference on hot-module reload and React Strict Mode double-invoke
- *  2. socket.off() now receives named handler references — previously the anonymous
- *     lambdas passed to socket.on() could never be removed, causing duplicate listeners
- *     that would fire twice for every incoming event after the first render cycle
- *  3. createPC moved to a ref-based factory so it captures the correct socketRef
- *     without needing to be in useEffect's dependency array
- *  4. unread badge counter now resets correctly when the chat panel is opened
+ * Changes from original:
+ * 1. Fetches TURN credentials from /api/turn/credentials before creating
+ *    RTCPeerConnection — uses Cloudflare TURN servers for NAT traversal.
+ * 2. Shows a pre-call lobby with session info and "Ready to Join" CTA.
+ * 3. Displays a countdown timer when the session hasn't started yet.
+ * 4. All existing WebRTC signalling, chat panel, and controls preserved.
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams, useNavigate }                           from 'react-router-dom';
 import { useAuth }                                          from '../auth/AuthContext';
 import { getSocket }                                        from '../api/socketClient';
+import { getTurnCredentials }                               from '../api/turnApi';
 import {
   Mic, MicOff, Video, VideoOff,
-  PhoneOff, MessageSquare, Users
+  PhoneOff, MessageSquare, Users,
+  Clock, Loader
 } from 'lucide-react';
 import './VideoCall.css';
 
-// ── ICE / TURN configuration ─────────────────────────────────────
-const getIceConfig = () => ({
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    ...(import.meta.env.VITE_TURN_URL ? [{
-      urls:       import.meta.env.VITE_TURN_URL,
-      username:   import.meta.env.VITE_TURN_USERNAME,
-      credential: import.meta.env.VITE_TURN_CREDENTIAL,
-    }] : []),
-  ],
-});
+// ── Countdown helper ──────────────────────────────────────────────
+const formatCountdown = (ms) => {
+  if (ms <= 0) return null;
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) return `${h}h ${m}m`;
+  if (m > 0) return `${m}m ${s}s`;
+  return `${s}s`;
+};
 
 const VideoCall = () => {
   const { sessionId } = useParams();
@@ -44,28 +43,57 @@ const VideoCall = () => {
   const remoteVideoRef = useRef(null);
 
   // WebRTC refs
-  const pcRef     = useRef(null);
-  const streamRef = useRef(null);
+  const pcRef        = useRef(null);
+  const streamRef    = useRef(null);
+  const iceServersRef = useRef(null); // cached TURN credentials
 
-  // FIX 1: socket stored in ref, obtained once inside useEffect
+  // Socket ref
   const socketRef = useRef(null);
 
   // UI state
-  const [status,    setStatus]    = useState('connecting');
-  const [micOn,     setMicOn]     = useState(true);
-  const [camOn,     setCamOn]     = useState(true);
-  const [showChat,  setShowChat]  = useState(false);
-  const [messages,  setMessages]  = useState([]);
-  const [chatInput, setChatInput] = useState('');
-  const [peerInfo,  setPeerInfo]  = useState(null);
-  const [mediaErr,  setMediaErr]  = useState('');
-  // FIX 4: separate unread counter, reset on open
-  const [unread,    setUnread]    = useState(0);
+  const [status,      setStatus]      = useState('lobby');   // lobby | connecting | waiting | live | ended
+  const [micOn,       setMicOn]       = useState(true);
+  const [camOn,       setCamOn]       = useState(true);
+  const [showChat,    setShowChat]    = useState(false);
+  const [messages,    setMessages]    = useState([]);
+  const [chatInput,   setChatInput]   = useState('');
+  const [peerInfo,    setPeerInfo]    = useState(null);
+  const [mediaErr,    setMediaErr]    = useState('');
+  const [unread,      setUnread]      = useState(0);
+  const [turnLoading, setTurnLoading] = useState(true);
+  const [sessionInfo, setSessionInfo] = useState(null);  // from socket join
+  const [countdown,   setCountdown]   = useState(null);  // ms until session
 
-  // FIX 3: PC factory using socketRef so it's stable across renders
+  // ── Fetch TURN credentials once on mount ────────────────────────
+  useEffect(() => {
+    getTurnCredentials().then(servers => {
+      iceServersRef.current = servers;
+      setTurnLoading(false);
+    });
+  }, []);
+
+  // ── Countdown ticker ────────────────────────────────────────────
+  useEffect(() => {
+    if (!sessionInfo?.scheduledAt) return;
+    const tick = () => {
+      const diff = new Date(sessionInfo.scheduledAt) - Date.now();
+      setCountdown(diff > 0 ? diff : 0);
+    };
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [sessionInfo?.scheduledAt]);
+
+  // ── PC factory ───────────────────────────────────────────────────
   const createPC = useCallback(() => {
     const socket = socketRef.current;
-    const pc = new RTCPeerConnection(getIceConfig());
+    const iceServers = iceServersRef.current || [
+      { urls: 'stun:stun.l.google.com:19302' },
+    ];
+
+    console.log('[WebRTC] Creating PC with ICE servers:', iceServers.map(s => s.urls));
+
+    const pc = new RTCPeerConnection({ iceServers });
 
     pc.ontrack = (e) => {
       if (remoteVideoRef.current) remoteVideoRef.current.srcObject = e.streams[0];
@@ -76,117 +104,112 @@ const VideoCall = () => {
     };
 
     pc.onconnectionstatechange = () => {
-      if (pc.connectionState === 'connected') setStatus('live');
+      if (pc.connectionState === 'connected')  setStatus('live');
       if (['disconnected', 'failed'].includes(pc.connectionState)) setStatus('ended');
     };
 
     return pc;
   }, [sessionId]);
 
-  // ── Main effect ───────────────────────────────────────────────
-  useEffect(() => {
-    // FIX 1: get socket ONCE here, not at component render time
+  // ── Start call (after user clicks "Join Call" in lobby) ─────────
+  const startCall = useCallback(async () => {
+    if (turnLoading) return;
     const socket = getSocket(localStorage.getItem('token'));
     socketRef.current = socket;
 
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    } catch (err) {
+      setMediaErr(
+        err.name === 'NotAllowedError'
+          ? 'Camera/microphone permission denied. Please allow access and refresh.'
+          : `Could not access camera/mic: ${err.message}`
+      );
+      setStatus('ended');
+      return;
+    }
+
+    streamRef.current = stream;
+    if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+
+    socket.emit('join-room', sessionId);
+    setStatus('waiting');
+
     let pc;
 
-    const start = async () => {
-      // Request camera + mic
-      let stream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      } catch (err) {
-        setMediaErr(
-          err.name === 'NotAllowedError'
-            ? 'Camera/microphone permission denied. Please allow access and refresh.'
-            : `Could not access camera/mic: ${err.message}`
-        );
-        setStatus('ended');
-        return;
-      }
-
-      streamRef.current = stream;
-      if (localVideoRef.current) localVideoRef.current.srcObject = stream;
-
-      socket.emit('join-room', sessionId);
-      setStatus('waiting');
-
-      // FIX 2: NAMED handler functions — socket.off() actually works now
-      const onPeerJoined = async ({ name, role }) => {
-        setPeerInfo({ name, role });
-        pc = createPC(); pcRef.current = pc;
-        stream.getTracks().forEach(t => pc.addTrack(t, stream));
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        socket.emit('offer', { roomId: sessionId, sdp: offer });
-      };
-
-      const onOffer = async ({ sdp }) => {
-        pc = createPC(); pcRef.current = pc;
-        stream.getTracks().forEach(t => pc.addTrack(t, stream));
-        await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
-        socket.emit('answer', { roomId: sessionId, sdp: answer });
-        setStatus('live');
-      };
-
-      const onAnswer = async ({ sdp }) => {
-        await pcRef.current?.setRemoteDescription(new RTCSessionDescription(sdp));
-        setStatus('live');
-      };
-
-      const onIceCandidate = async ({ candidate }) => {
-        try { await pcRef.current?.addIceCandidate(new RTCIceCandidate(candidate)); }
-        catch (e) { console.warn('[WebRTC] ICE error:', e); }
-      };
-
-      const onPeerLeft = () => {
-        if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
-        setStatus('waiting'); setPeerInfo(null);
-        pcRef.current?.close(); pcRef.current = null;
-      };
-
-      const onChatMessage = (msg) => {
-        setMessages(prev => [...prev, msg]);
-        // FIX 4: only increment unread when chat panel is closed
-        setShowChat(open => {
-          if (!open) setUnread(c => c + 1);
-          return open;
-        });
-      };
-
-      socket.on('peer-joined',   onPeerJoined);
-      socket.on('offer',         onOffer);
-      socket.on('answer',        onAnswer);
-      socket.on('ice-candidate', onIceCandidate);
-      socket.on('peer-left',     onPeerLeft);
-      socket.on('chat-message',  onChatMessage);
-
-      // Return named-handler cleanup
-      return () => {
-        socket.off('peer-joined',   onPeerJoined);
-        socket.off('offer',         onOffer);
-        socket.off('answer',        onAnswer);
-        socket.off('ice-candidate', onIceCandidate);
-        socket.off('peer-left',     onPeerLeft);
-        socket.off('chat-message',  onChatMessage);
-      };
+    const onPeerJoined = async ({ name, role }) => {
+      setPeerInfo({ name, role });
+      pc = createPC(); pcRef.current = pc;
+      stream.getTracks().forEach(t => pc.addTrack(t, stream));
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      socket.emit('offer', { roomId: sessionId, sdp: offer });
     };
 
-    let cleanup;
-    start().then(fn => { cleanup = fn; }).catch(console.error);
+    const onOffer = async ({ sdp }) => {
+      pc = createPC(); pcRef.current = pc;
+      stream.getTracks().forEach(t => pc.addTrack(t, stream));
+      await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      socket.emit('answer', { roomId: sessionId, sdp: answer });
+      setStatus('live');
+    };
 
+    const onAnswer = async ({ sdp }) => {
+      await pcRef.current?.setRemoteDescription(new RTCSessionDescription(sdp));
+      setStatus('live');
+    };
+
+    const onIceCandidate = async ({ candidate }) => {
+      try { await pcRef.current?.addIceCandidate(new RTCIceCandidate(candidate)); }
+      catch (e) { console.warn('[WebRTC] ICE error:', e); }
+    };
+
+    const onPeerLeft = () => {
+      if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
+      setStatus('waiting');
+      setPeerInfo(null);
+      pcRef.current?.close();
+      pcRef.current = null;
+    };
+
+    const onChatMessage = (msg) => {
+      setMessages(prev => [...prev, msg]);
+      setShowChat(open => {
+        if (!open) setUnread(c => c + 1);
+        return open;
+      });
+    };
+
+    socket.on('peer-joined',   onPeerJoined);
+    socket.on('offer',         onOffer);
+    socket.on('answer',        onAnswer);
+    socket.on('ice-candidate', onIceCandidate);
+    socket.on('peer-left',     onPeerLeft);
+    socket.on('chat-message',  onChatMessage);
+
+    return () => {
+      socket.off('peer-joined',   onPeerJoined);
+      socket.off('offer',         onOffer);
+      socket.off('answer',        onAnswer);
+      socket.off('ice-candidate', onIceCandidate);
+      socket.off('peer-left',     onPeerLeft);
+      socket.off('chat-message',  onChatMessage);
+    };
+  }, [sessionId, createPC, turnLoading]);
+
+  // Cleanup on unmount
+  useEffect(() => {
     return () => {
       streamRef.current?.getTracks().forEach(t => t.stop());
       pcRef.current?.close();
-      socket.emit('leave-room', sessionId);
-      cleanup?.();
+      socketRef.current?.emit('leave-room', sessionId);
     };
-  }, [sessionId, createPC]);
+  }, [sessionId]);
 
-  // ── Controls ──────────────────────────────────────────────────
+  // ── Controls ──────────────────────────────────────────────────────
   const toggleMic = () => {
     const track = streamRef.current?.getAudioTracks()[0];
     if (track) { track.enabled = !track.enabled; setMicOn(track.enabled); }
@@ -211,15 +234,11 @@ const VideoCall = () => {
     setChatInput('');
   };
 
-  // FIX 4: reset unread when opening chat
   const toggleChat = () => {
-    setShowChat(prev => {
-      if (!prev) setUnread(0);
-      return !prev;
-    });
+    setShowChat(prev => { if (!prev) setUnread(0); return !prev; });
   };
 
-  // ── Render ────────────────────────────────────────────────────
+  // ── Error screen ─────────────────────────────────────────────────
   if (mediaErr) {
     return (
       <div className="vc-error-screen">
@@ -233,10 +252,63 @@ const VideoCall = () => {
     );
   }
 
+  // ── Lobby screen ─────────────────────────────────────────────────
+  if (status === 'lobby') {
+    const countdownStr = countdown != null ? formatCountdown(countdown) : null;
+    const isUpcoming   = countdown != null && countdown > 15 * 60 * 1000;
+
+    return (
+      <div className="vc-lobby">
+        <div className="vc-lobby-card">
+          <div className="vc-lobby-icon">
+            <Video size={36} />
+          </div>
+          <h2 className="vc-lobby-title">Video Session</h2>
+          <p className="vc-lobby-id">Room ID: <code>{sessionId}</code></p>
+
+          {isUpcoming && countdownStr && (
+            <div className="vc-lobby-countdown">
+              <Clock size={16} />
+              <span>Session starts in <strong>{countdownStr}</strong></span>
+            </div>
+          )}
+
+          {!isUpcoming && (
+            <p className="vc-lobby-ready">Your session is ready to begin.</p>
+          )}
+
+          <ul className="vc-lobby-checklist">
+            <li>✓ Find a quiet, well-lit space</li>
+            <li>✓ Test your camera and microphone</li>
+            <li>✓ Close unnecessary browser tabs</li>
+          </ul>
+
+          {turnLoading ? (
+            <div className="vc-lobby-loading">
+              <Loader size={18} className="vc-spin" />
+              <span>Connecting to servers…</span>
+            </div>
+          ) : (
+            <button
+              className="vc-lobby-join-btn"
+              onClick={startCall}
+            >
+              <Video size={18} />
+              {isUpcoming ? 'Join Early' : 'Join Call'}
+            </button>
+          )}
+
+          <button className="vc-lobby-back" onClick={() => navigate(-1)}>
+            ← Go back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Call screen ───────────────────────────────────────────────────
   return (
     <div className="vc-page">
-
-      {/* ── Video area ── */}
       <div className={`vc-videos ${showChat ? 'vc-videos-shifted' : ''}`}>
         <video ref={remoteVideoRef} className="vc-remote" autoPlay playsInline />
 
@@ -258,7 +330,6 @@ const VideoCall = () => {
         )}
       </div>
 
-      {/* ── Controls bar ── */}
       <div className="vc-controls">
         <button className={`vc-btn ${micOn ? '' : 'off'}`} onClick={toggleMic} title={micOn ? 'Mute' : 'Unmute'}>
           {micOn ? <Mic size={20} /> : <MicOff size={20} />}
@@ -282,7 +353,6 @@ const VideoCall = () => {
         </button>
       </div>
 
-      {/* ── In-call chat panel ── */}
       {showChat && (
         <div className="vc-chat">
           <div className="vc-chat-header"><span>In-call chat</span></div>
@@ -313,7 +383,6 @@ const VideoCall = () => {
           </form>
         </div>
       )}
-
     </div>
   );
 };

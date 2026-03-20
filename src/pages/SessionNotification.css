@@ -1,0 +1,161 @@
+/* src/components/StudentDashboard/SessionNotification.css */
+
+.sn-stack {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 2100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 380px;
+  width: calc(100vw - 2rem);
+}
+
+.sn-toast {
+  background: #1a2234;
+  color: #f1f5f9;
+  border-radius: 16px;
+  padding: 1rem 1rem 1rem 1.1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  animation: sn-slide-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes sn-slide-in {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+.sn-icon-wrap {
+  width: 36px;
+  height: 36px;
+  background: rgba(99, 179, 237, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #63b3ed;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sn-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sn-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.sn-sub {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.sn-sub strong {
+  color: #cbd5e1;
+  text-transform: capitalize;
+}
+
+.sn-time {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #64b5f6;
+  margin: 0.15rem 0 0.5rem;
+}
+
+.sn-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sn-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.85rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sn-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sn-btn-join {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.85rem;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  animation: sn-pulse-btn 2s infinite;
+}
+
+@keyframes sn-pulse-btn {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+  50%       { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+}
+
+.sn-btn-join:hover {
+  background: #2563eb;
+}
+
+.sn-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+  margin-top: 2px;
+}
+
+.sn-close:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #f1f5f9;
+}
+
+/* Mobile — above bottom nav */
+@media (max-width: 768px) {
+  .sn-stack {
+    bottom: 5.5rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    max-width: 100%;
+    width: auto;
+  }
+}

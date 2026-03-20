@@ -313,3 +313,113 @@
 
 .sm-save:hover:not(:disabled) { background: #2d3a54; }
 .sm-save:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.sm-input-group {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.sm-input-group:focus-within {
+  border-color: #6366f1;
+}
+
+.sm-input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.8rem;
+  color: #64748b;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.sm-input-group .sm-input {
+  border: none;
+  background: transparent;
+  flex: 1;
+  margin: 0;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.sm-input-group .sm-input:focus {
+  outline: none;
+}
+
+/* Customizing date/time input pickers slightly */
+.sm-input[type="date"]::-webkit-calendar-picker-indicator,
+.sm-input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.sm-input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.sm-input[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Custom Time Picker */
+.time-picker-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+}
+
+.time-picker-wrapper .sm-input.time-picker-trigger {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+}
+
+.time-picker-wrapper .placeholder {
+  color: #94a3b8;
+}
+
+.time-picker-popup {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.time-picker-popup::-webkit-scrollbar {
+  width: 6px;
+}
+.time-picker-popup::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.time-picker-item {
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #1a2234;
+  transition: background 0.15s;
+}
+
+.time-picker-item:hover {
+  background: #f1f5f9;
+}
+
+.time-picker-item.selected {
+  background: #eef2ff;
+  color: #6366f1;
+  font-weight: 600;
+}
