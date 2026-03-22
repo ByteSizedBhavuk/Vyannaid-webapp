@@ -10,6 +10,7 @@
     letter-spacing: 1px;
     margin-bottom: 1rem;
     text-transform: uppercase;
+    padding: 0 var(--mobile-side-padding);
 }
 
 .assessment-card {
@@ -44,3 +45,12 @@
 .assessment-btn:hover {
     background-color: #2D3A54;
 }
+
+@media (max-width: 768px) {
+    .assessment-card {
+        border-radius: 0;
+        box-shadow: none;
+        border-bottom: 1px solid #F1F5F9;
+        padding: 1.5rem var(--mobile-side-padding);
+    }
+}

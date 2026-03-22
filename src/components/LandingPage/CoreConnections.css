@@ -4,6 +4,14 @@
     background-color: var(--color-bg-cream);
 }
 
+@media (max-width: 1024px) {
+    .core-connections-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+}
+
 .core-container {
     max-width: 1280px;
     margin: 0 auto;

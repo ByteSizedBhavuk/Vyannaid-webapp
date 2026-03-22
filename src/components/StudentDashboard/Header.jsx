@@ -21,30 +21,27 @@ const getInitials = (name = "") =>
 
     return (
         <header className="dashboard-header">
-            {/* Mobile: Settings and Notifications on the left */}
+            {/* Left Actions: Settings (Mobile Only) */}
             <div className="header-left-actions desktop-hide">
                 <button className="settings-btn-mobile">
                     <Settings size={20} color="#64748B" />
                 </button>
-                <button className="notification-btn">
-                    <Bell size={20} color="#64748B" />
-                </button>
             </div>
 
-            <div className="header-spacer"></div>
+            {/* Center Logo (Mobile Only - Positioned absolutely in CSS) */}
+            <div className="vyannaid-mobile-logo desktop-hide">
+                Vyannaid
+            </div>
+
+            <div className="header-spacer mobile-hide"></div>
 
             <div className="header-actions">
                 <button className="settings-btn mobile-hide">
                     <Settings size={20} color="#64748B" />
                 </button>
-                <button className="notification-btn mobile-hide">
+                <button className="notification-btn">
                     <Bell size={20} color="#64748B" />
                 </button>
-
-                {/* Vyannaid text for mobile */}
-                <div className="vyannaid-mobile-logo desktop-hide">
-                    Vyannaid
-                </div>
 
                 <button className="user-profile-pill" onClick={toggleProfile}>
                     <div

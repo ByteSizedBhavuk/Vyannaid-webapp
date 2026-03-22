@@ -127,7 +127,12 @@
     display: block;
     background: transparent;
     color: #FFFFFF;
-    z-index: 1001;
+    z-index: 1002; /* Higher than overlay (1001) */
+    transition: color 0.2s ease;
+}
+
+.navbar.menu-open .mobile-menu-toggle {
+    color: #FFFFFF !important; /* Force white when menu is open */
 }
 
 .mobile-menu-toggle:hover {
@@ -167,7 +172,7 @@
 .mobile-nav-link {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: #FFFFFF;
 }
 
 .mobile-auth-actions {
@@ -180,18 +185,49 @@
 
 .mobile-btn-login {
     text-align: center;
-    padding: 1.25rem;
+    padding: 1rem;
     font-weight: 700;
-    color: var(--color-primary);
-    border: 1px solid var(--color-border);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-lg);
 }
 
 .mobile-btn-register {
     text-align: center;
-    padding: 1.25rem;
-    background: var(--color-primary);
-    color: var(--color-bg-main);
+    padding: 1rem;
+    background: #FFFFFF;
+    color: rgb(17, 24, 39);
     font-weight: 700;
     border-radius: var(--radius-lg);
+}
+
+/* Auth Page Navbar (Restored for light theme) */
+.navbar.auth-nav:not(.scrolled) {
+    position: sticky; /* Take space in the layout on auth pages */
+    top: 0;
+    padding: 0.5rem 0; /* Reduced from 1.25rem for a tighter look */
+    background: rgba(255, 255, 255, 1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.navbar.auth-nav:not(.scrolled) .navbar-logo {
+    font-size: 1.25rem;
+}
+
+.navbar.auth-nav:not(.scrolled) .navbar-logo,
+.navbar.auth-nav:not(.scrolled) .nav-link,
+.navbar.auth-nav:not(.scrolled) .btn-login,
+.navbar.auth-nav:not(.scrolled) .mobile-menu-toggle {
+    color: var(--color-primary);
+}
+
+.navbar.auth-nav:not(.scrolled) .nav-link::after {
+    background: var(--color-primary);
+}
+
+.navbar.auth-nav:not(.scrolled) .btn-register {
+    background: var(--color-primary);
+    color: var(--color-white);
 }

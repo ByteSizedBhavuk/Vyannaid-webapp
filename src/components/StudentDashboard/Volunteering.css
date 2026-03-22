@@ -50,3 +50,10 @@
 .volunteer-arrow-btn:hover {
     background: rgba(255, 255, 255, 0.2);
 }
+
+@media (max-width: 768px) {
+    .volunteer-card {
+        border-radius: 0;
+        padding: 1.5rem var(--mobile-side-padding);
+    }
+}

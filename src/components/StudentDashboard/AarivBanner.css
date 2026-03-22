@@ -42,11 +42,16 @@
 
 .aariv-desc {
     font-size: 0.875rem;
-    line-height: 1.5;
+    line-height: 1.4;
     color: #94A3B8;
     margin: 0;
     max-width: 450px;
 }
+
+.aariv-action-side {
+    display: none;
+}
+
 
 /* Background Decoration */
 .aariv-bg-decor {
@@ -78,3 +83,61 @@
     bottom: -20%;
     right: -20%;
 }
+
+@media (max-width: 768px) {
+    .aariv-banner {
+        border-radius: 0;
+        padding: 1.5rem var(--mobile-side-padding);
+        min-height: auto;
+    }
+
+    .aariv-content {
+        max-width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1.25rem;
+    }
+
+    .aariv-text-side {
+        flex: 1;
+    }
+
+    .aariv-pill {
+        margin-bottom: 0.5rem;
+        font-size: 0.6rem;
+    }
+
+    .aariv-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .aariv-desc {
+        font-size: 0.75rem;
+        line-height: 1.3;
+        max-width: none;
+    }
+
+    .aariv-action-side {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .aariv-action-circle {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+

@@ -37,3 +37,16 @@
     background: #F9FAFB;
     border-color: #D1D5DB;
 }
+
+@media (max-width: 768px) {
+    .crisis-card {
+        border-radius: 0;
+        box-shadow: none;
+        border-bottom: 1px solid #F1F5F9;
+        padding: 1.5rem var(--mobile-side-padding);
+    }
+
+    .crisis-support-section .section-title {
+        padding: 0 var(--mobile-side-padding);
+    }
+}

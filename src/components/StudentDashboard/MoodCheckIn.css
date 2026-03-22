@@ -313,7 +313,9 @@
 @media (max-width: 480px) {
   .mci-card {
     padding: 1.75rem 1.25rem 1.5rem;
-    border-radius: 20px;
+    border-radius: 0; /* Full-width app feel */
+    max-width: 100%;
+    gap: 1rem;
   }
 
   .mci-emoji {

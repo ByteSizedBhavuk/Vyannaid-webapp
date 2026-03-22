@@ -11,32 +11,29 @@ const MobileBottomNav = () => {
 
     return (
         <nav className="mobile-bottom-nav">
+            <Link to="/dashboard/student" className={`nav-item ${isActive('/dashboard/student') ? 'active' : ''}`}>
+                <Home size={isActive('/dashboard/student') ? 26 : 22} />
+                <span>Home</span>
+            </Link>
+
             <Link to="/dashboard/appointments" className={`nav-item ${isActive('/dashboard/appointments') ? 'active' : ''}`}>
-                <Calendar size={isActive('/dashboard/appointments') ? 28 : 24} />
+                <Calendar size={isActive('/dashboard/appointments') ? 26 : 22} />
                 <span>Care</span>
             </Link>
 
             <Link to="/dashboard/analytics" className={`nav-item ${isActive('/dashboard/analytics') ? 'active' : ''}`}>
-                <Activity size={isActive('/dashboard/analytics') ? 28 : 24} />
+                <Activity size={isActive('/dashboard/analytics') ? 26 : 22} />
                 <span>Vitals</span>
             </Link>
 
-            {/* Center "Home" Floating Button */}
-            <Link to="/dashboard/student" className={`nav-item center-button ${isActive('/dashboard/student') ? 'active' : ''}`}>
-                <div className="center-circle">
-                    <Home size={28} />
-                </div>
-                <span>Home</span>
-            </Link>
-
             <Link to="/dashboard/activities" className={`nav-item ${isActive('/dashboard/activities') ? 'active' : ''}`}>
-                <Bot size={isActive('/dashboard/activities') ? 28 : 24} />
+                <Bot size={isActive('/dashboard/activities') ? 26 : 22} />
                 <span>AI Care</span>
             </Link>
 
             <Link to="/dashboard/community" className={`nav-item ${isActive('/dashboard/community') ? 'active' : ''}`}>
-                <Users size={isActive('/dashboard/community') ? 28 : 24} />
-                <span>Comm</span>
+                <Users size={isActive('/dashboard/community') ? 26 : 22} />
+                <span>Forum</span>
             </Link>
         </nav>
     );

@@ -1,7 +1,11 @@
+:root {
+    --mobile-side-padding: 1.25rem;
+}
+
 .dashboard-layout {
     display: flex;
     min-height: 100vh;
-    background-color: #FAFAFA;
+    background-color: #F8FAFC; /* Warmer, softer white for app feel */
 }
 
 .dashboard-layout.full-height {
@@ -92,11 +96,35 @@
     }
 
     .dashboard-main {
-        padding: 1rem;
-        padding-bottom: 80px;
-        /* Space for bottom nav */
+        padding: 0; 
+        padding-top: 64px; /* Space for fixed header */
+        padding-bottom: 100px; /* Space for bottom nav */
+    }
+
+    .dashboard-content-wrapper {
+        padding: 0; 
+        flex-direction: column;
+        gap: 0.85rem; /* Standardized vertical rhythm */
+    }
+
+    .dashboard-left-column,
+    .dashboard-right-column {
+        gap: 0.85rem; 
+    }
+
+    /* Mobile Reordering: daily practices above aariv banner */
+    .dashboard-left-column > :nth-child(1) { order: 1; } /* Vitals */
+    .dashboard-left-column > :nth-child(2) { order: 3; } /* AarivBanner (swapped) */
+    .dashboard-left-column > :nth-child(3) { order: 2; } /* DailyActivities (swapped) */
+    .dashboard-left-column > :nth-child(4) { order: 4; } /* Assessments */
+    .dashboard-left-column > :nth-child(5) { order: 5; } /* Volunteering */
+
+    .dashboard-section-title-wrapper {
+        padding: 0 var(--mobile-side-padding);
     }
 }
+
+
 /* Admin and counsellor — no sidebar, content fills full width */
 .dashboard-main.no-sidebar {
     margin-left: 0;

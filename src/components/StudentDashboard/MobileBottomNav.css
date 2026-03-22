@@ -1,11 +1,9 @@
-/* MobileBottomNav.css */
+/* MobileBottomNav.css (Refined Full-Width Design) */
 
-/* Hidden by default on desktop */
 .mobile-bottom-nav {
     display: none;
 }
 
-/* Only show on mobile */
 @media (max-width: 768px) {
     .mobile-bottom-nav {
         display: flex;
@@ -14,15 +12,15 @@
         position: fixed;
         bottom: 0;
         left: 0;
+        right: 0;
         width: 100vw;
-        height: 85px;
-        /* Taller height to encompass labels and spacing */
-        background-color: white;
+        height: 76px; /* Optimized height for labels and icons */
+        background: #FFFFFF;
         border-top: 1px solid #E2E8F0;
         z-index: 1000;
-        padding: 0.5rem 0.5rem 1.5rem 0.5rem;
-        /* Safe area padding at bottom */
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.03);
+        padding-bottom: env(safe-area-inset-bottom, 1rem); /* Dynamic safe area for modern phones */
+        box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.04);
+        padding-top: 0.5rem;
     }
 
     .nav-item {
@@ -30,10 +28,9 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 0.25rem;
+        gap: 0.2rem;
         text-decoration: none;
-        color: #94A3B8;
-        /* Muted gray for inactive icons */
+        color: #94A3B8; /* Muted gray for inactive icons */
         flex: 1;
         transition: all 0.2s ease;
     }
@@ -41,56 +38,22 @@
     .nav-item span {
         font-size: 0.65rem;
         font-weight: 600;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.01em;
+        color: #94A3B8; /* Keeping text muted */
     }
 
-    /* Active State Scaling & Color */
+    /* Active State: ONLY highlight the icon */
     .nav-item.active {
-        color: #1E293B;
-        /* Darker Navy for active route */
+        color: #0F172A; /* Reverted back from green to dark navy as requested */
     }
 
-    /* Keep the stroke thick specifically when active to mirror design weight */
     .nav-item.active svg {
-        stroke-width: 2.5px;
+        stroke-width: 2.5px; /* Thicker icon for active state */
     }
 
-    /* Center Care Floating Button Configuration */
-    .nav-item.center-button {
-        position: relative;
-        top: -15px;
-        /* Push the entire container up slightly */
-        flex: 1.25;
-        /* Give it slightly more flex room */
-    }
-
+    /* Removing all previous special highlights/backgrounds */
     .center-circle {
-        width: 56px;
-        height: 56px;
-        background-color: #1A2234;
-        /* Rich Navy Background */
-        color: white;
-        /* White icon inside */
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 10px rgba(26, 34, 52, 0.3);
-        margin-bottom: 0.25rem;
-        transition: all 0.2s ease;
-        border: 4px solid #FAFAFA;
-        /* Cutout border effect acting against layout bg */
-    }
-
-    .center-button.active .center-circle {
-        transform: scale(1.05);
-        /* Slight pop if deeply active */
-        box-shadow: 0 6px 14px rgba(26, 34, 52, 0.4);
-    }
-
-    /* Center span label needs separate adjustment so it doesn't float too high */
-    .nav-item.center-button span {
-        color: #1E293B;
-        /* Hard-code active color to match */
+        display: none; /* No more circle background */
     }
 }
+

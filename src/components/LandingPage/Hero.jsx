@@ -13,7 +13,7 @@ const Hero = () => {
                 <div className="hero-content" data-reveal>
                     <div className="hero-badge">
                         <Sparkles size={14} className="badge-icon" />
-                        <span>New Dawn for Campus Wellness</span>
+                        <span>CAMPUS MENTAL HEALTH REIMAGINED</span>
                     </div>
 
                     <h1 className="hero-title">
@@ -23,7 +23,7 @@ const Hero = () => {
 
                     <p className="hero-description">
                         A holistic support system for students, powered by meaningful community 
-                        connections and proactive smart insights. Start your fresh chapter today.
+                        connections and proactive smart insights.
                     </p>
 
                     <div className="hero-actions">
@@ -33,7 +33,7 @@ const Hero = () => {
 
                         <button className="btn-secondary transition-all">
                             <div className="play-icon-container">
-                                <Play size={14} fill="var(--color-primary)" />
+                                <Play size={14} fill="white" color="white" />
                             </div>
                             <span>Watch Story</span>
                         </button>
@@ -52,16 +52,16 @@ const Hero = () => {
                         {/* Premium Floating Card */}
                         <div className="floating-card-glass bottom-left">
                             <div className="card-icon-container">
-                                <Sun size={20} className="sun-icon" />
+                                <Sparkles size={20} className="badge-icon" />
                             </div>
                             <div className="card-content">
-                                <div className="card-title">Daily Positivity</div>
+                                <div className="card-title">Live MoodPulse</div>
                                 <div className="progress-container">
                                     <div className="progress-bar">
                                         <div className="progress-fill"></div>
                                     </div>
-                                    <span className="progress-label">85%</span>
                                 </div>
+                                <span className="progress-label">Overall wellbeing is 85% today!</span>
                             </div>
                         </div>
                     </div>

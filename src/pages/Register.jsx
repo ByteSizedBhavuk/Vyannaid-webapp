@@ -11,7 +11,7 @@ import "./Login.css";
 
 const Register = () => {
   const [form, setForm] = useState({
-    name: "", email: "", password: "", role: "student",
+    name: "", email: "", password: "", role: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError]     = useState("");
@@ -87,6 +87,7 @@ const Register = () => {
           onChange={(e) => setForm({ ...form, role: e.target.value })}
           required
         >
+          <option value="" disabled>Select Role</option>
           <option value="student">Student</option>
           <option value="admin">Admin</option>
         </select>

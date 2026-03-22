@@ -8,6 +8,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    padding: 0 var(--mobile-side-padding);
 }
 
 .activities-section .section-title {
@@ -84,5 +85,17 @@
 @media (max-width: 768px) {
     .activities-list {
         grid-template-columns: 1fr;
+        gap: 0;
     }
-}
+
+    .activity-card {
+        border-radius: 0;
+        box-shadow: none;
+        border-bottom: 1px solid #F1F5F9;
+        padding: 1.25rem var(--mobile-side-padding);
+    }
+
+    .activities-header {
+        padding: 0 1.25rem;
+    }
+}

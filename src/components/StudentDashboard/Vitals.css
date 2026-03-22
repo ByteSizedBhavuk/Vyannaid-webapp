@@ -12,6 +12,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    padding: 0 var(--mobile-side-padding);
 }
 
 .vitals-section .section-title {
@@ -89,7 +90,10 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .vitals-section {
-        padding: 1.25rem 1rem;
+        padding: 1.25rem var(--mobile-side-padding);
+        border-radius: 0;
+        box-shadow: none;
+        border-bottom: 1px solid #F1F5F9;
     }
 
     .vitals-grid {

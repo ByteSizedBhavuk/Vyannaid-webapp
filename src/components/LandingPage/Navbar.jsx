@@ -32,8 +32,10 @@ const Navbar = () => {
         { name: 'For Universities', path: '/universities' },
     ];
 
+    const isAuthPage = ['/login', '/register'].includes(location.pathname);
+
     return (
-        <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${isAuthPage ? 'auth-nav' : ''} ${isOpen ? 'menu-open' : ''}`}>
             <div className="navbar-container">
                 {/* Logo */}
                 <Link to="/" className="navbar-logo">

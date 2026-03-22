@@ -38,11 +38,14 @@
 /* ================= MOBILE LOGO ================= */
 
 .vyannaid-mobile-logo {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #1E293B;
-    margin-right: 10px;
-    white-space: nowrap;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.01em;
+    pointer-events: none;
 }
 
 /* ================= FLEX SPACER ================= */
@@ -168,8 +171,19 @@
 @media (max-width: 768px) {
 
     .dashboard-header {
-        padding: 0.5rem 0.8rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        width: 100vw;
+        height: 64px;
+        padding: 0.75rem 1.25rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     }
+
 
     .desktop-show {
         display: none !important;
@@ -192,19 +206,26 @@
     }
 
     .notification-btn,
-    .settings-btn {
-        padding: 5px;
+    .settings-btn,
+    .settings-btn-mobile {
+        width: 44px; /* Minimum ergonomic touch target */
+        height: 44px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .profile-avatar,
     .profile-img {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
     }
 
     .vyannaid-mobile-logo {
-        font-size: 1.05rem;
+        font-size: 1.1rem;
+        font-weight: 800;
     }
 }
 
