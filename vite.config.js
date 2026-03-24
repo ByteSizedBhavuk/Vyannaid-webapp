@@ -15,15 +15,18 @@ export default defineConfig(({ mode }) => {
         'ngrok-skip-browser-warning': 'true', // Skip ngrok interstitial page
       },
       proxy: {
+        // Handle all backend routes - keep focused on API and Auth
+        '/api': { target: apiTarget, changeOrigin: true },
+        '/auth': { target: apiTarget, changeOrigin: true },
         // Handle all backend routes — but bypass for navigation requests (HTML)
         // so React Router handle deep links/refreshes.
-        '/api':       { target: apiTarget, changeOrigin: true },
-        '/auth':      { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
+        '/api': { target: apiTarget, changeOrigin: true },
+        '/auth': { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
         '/dashboard': { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
-        '/admin':     { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
-        '/counsellor':{ target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
-        '/profile':   { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
-        '/messages':  { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
+        '/admin': { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
+        '/counsellor': { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
+        '/profile': { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
+        '/messages': { target: apiTarget, changeOrigin: true, bypass: (req) => req.headers.accept?.includes('html') ? '/index.html' : null },
         '/socket.io': {
           target: apiTarget,
           ws: true,

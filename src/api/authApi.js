@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 // Shared axios instance — all requests get the Bearer token automatically
 export const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE_URL + "/api",
   headers: {
     "Content-Type": "application/json",
     // Tells ngrok free tier to skip its browser warning interstitial page.
@@ -15,7 +15,7 @@ export const api = axios.create({
 
 api.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
-  
+
   // ── Public Routes ─────────────────────────────────────────────
   // These routes DO NOT require a token to be sent.
   const publicRoutes = ["/auth/login", "/auth/register", "/api/music", "/"];
@@ -53,7 +53,7 @@ api.interceptors.response.use(
     // If request was blocked by our request interceptor above
     if (error.message === "No token provided. Request blocked.") {
       if (window.location.pathname !== "/login") {
-         window.location.replace("/login");
+        window.location.replace("/login");
       }
       return Promise.reject(error);
     }
@@ -79,4 +79,4 @@ api.interceptors.response.use(
 
 // Auth endpoints
 export const registerUser = (data) => api.post("/auth/register", data);
-export const loginUser    = (data) => api.post("/auth/login", data);
+export const loginUser = (data) => api.post("/auth/login", data);
