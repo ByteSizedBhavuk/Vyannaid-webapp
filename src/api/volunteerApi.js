@@ -2,13 +2,13 @@
 import { api } from './authApi';
 
 // POST /api/volunteer — student submits application
-export const submitVolunteerApplication = (data) => api.post('/api/volunteer', data);
+export const submitVolunteerApplication = (data) => api.post('/volunteer', data);
 
 // GET /api/volunteer/me — student views their own application
-export const getMyVolunteerApplication = () => api.get('/api/volunteer/me');
+export const getMyVolunteerApplication = () => api.get('/volunteer/me');
 
 // DELETE /api/volunteer/me — student withdraws pending application
-export const withdrawVolunteerApplication = () => api.delete('/api/volunteer/me');
+export const withdrawVolunteerApplication = () => api.delete('/volunteer/me');
 
 // ── Admin ──────────────────────────────────────────────────────────────────
 
