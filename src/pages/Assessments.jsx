@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Search, Download, UploadCloud, Brain, FileText, Smile, Image as ImageIcon, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Download, UploadCloud, Brain, FileText, Smile, Image as ImageIcon, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
+import { getRecentAssessment } from '../api/assessmentApi';
 import DashboardLayout from '../components/StudentDashboard/DashboardLayout';
 import CounsellorLayout from '../components/CounsellorDashboard/CounsellorLayout';
 import './Assessments.css';
@@ -11,6 +12,43 @@ const Assessments = () => {
   const Layout = isStudent ? DashboardLayout : CounsellorLayout;
 
   const [activeTab, setActiveTab] = useState('All Tests');
+  const [recentResults, setRecentResults] = useState([]);
+  const [loading, setLoading] = useState(isStudent);
+
+  useEffect(() => {
+    if (isStudent) {
+      setLoading(true);
+      getRecentAssessment()
+        .then(res => {
+          if (res.data.data) {
+            const assessment = res.data.data;
+            // Map backend Assessment model to UI format
+            setRecentResults([{
+              id: assessment._id,
+              name: user.name,
+              test: 'Last Assessment',
+              result: `${assessment.severity.toUpperCase()} (${assessment.score})`,
+              time: new Date(assessment.createdAt).toLocaleDateString(),
+              alert: assessment.severity === 'high'
+            }]);
+          } else {
+            setRecentResults([]);
+          }
+        })
+        .catch(err => {
+          console.error('Failed to fetch assessments:', err);
+          setRecentResults([]);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      // Hardcoded data for counsellors (as in original)
+      setRecentResults([
+        { id: 1, name: 'David Bowie', test: 'EQ Profile', result: 'High Core', time: '2h ago', alert: false },
+        { id: 2, name: 'Patti Smith', test: 'Cognitive Aptitude', result: '94th Percentile', time: 'Yesterday', alert: false },
+        { id: 3, name: 'Iggy Pop', test: 'Anxiety Inventory', result: 'Action Required', time: 'Yesterday', alert: true }
+      ]);
+    }
+  }, [isStudent, user?.name]);
 
   const INVENTORY = [
     {
@@ -63,33 +101,6 @@ const Assessments = () => {
       progress: 12,
       status: 'Started Today',
       patientId: '#3991'
-    }
-  ];
-
-  const RECENT = [
-    {
-      id: 1,
-      name: 'David Bowie',
-      test: 'EQ Profile',
-      result: 'High Core',
-      time: '2h ago',
-      alert: false
-    },
-    {
-      id: 2,
-      name: 'Patti Smith',
-      test: 'Cognitive Aptitude',
-      result: '94th Percentile',
-      time: 'Yesterday',
-      alert: false
-    },
-    {
-      id: 3,
-      name: 'Iggy Pop',
-      test: 'Anxiety Inventory',
-      result: 'Action Required',
-      time: 'Yesterday',
-      alert: true
     }
   ];
 
@@ -203,20 +214,29 @@ const Assessments = () => {
                 <button className="ca-view-all">VIEW ALL</button>
               </div>
               <div className="ca-results-list ca-card">
-                {RECENT.map((item, index) => (
-                  <div key={item.id} className={`ca-result-item ${index !== RECENT.length - 1 ? 'ca-border-bottom' : ''}`}>
-                    <div className="ca-result-left">
-                      <span className="ca-result-name">{item.name}</span>
-                      <span className="ca-result-test">{item.test}</span>
-                    </div>
-                    <div className="ca-result-right">
-                      {!isStudent && (
-                        <span className={`ca-result-score ${item.alert ? 'ca-text-red' : ''}`}>{item.result}</span>
-                      )}
-                      <span className="ca-result-time">{item.time}</span>
-                    </div>
+                {loading ? (
+                  <div className="ca-loading-state" style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+                    <Loader2 className="animate-spin" style={{ margin: '0 auto 0.5rem' }} />
+                    Fetching records...
                   </div>
-                ))}
+                ) : recentResults.length === 0 ? (
+                  <div className="ca-empty-state" style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+                    No assessments taken yet.
+                  </div>
+                ) : (
+                  recentResults.map((item, index) => (
+                    <div key={item.id} className={`ca-result-item ${index !== recentResults.length - 1 ? 'ca-border-bottom' : ''}`}>
+                      <div className="ca-result-left">
+                        <span className="ca-result-name">{item.name}</span>
+                        <span className="ca-result-test">{item.test}</span>
+                      </div>
+                      <div className="ca-result-right">
+                        <span className={`ca-result-score ${item.alert ? 'ca-text-red' : ''}`}>{item.result}</span>
+                        <span className="ca-result-time">{item.time}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

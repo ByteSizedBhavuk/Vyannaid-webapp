@@ -102,20 +102,13 @@ const StudentMessageInterface = ({ counsellor, onClose, currentUserId }) => {
   const inputRef    = useRef(null);
 
   const contacts = useMemo(() => [
-    { ...counsellor, roleLabel: 'CLINICAL COUNSELOR' },
-    { _id: 'support_staff', name: 'Support Staff', roleLabel: 'ADMINISTRATIVE', isStatic: true }
+    { ...counsellor, roleLabel: 'CLINICAL COUNSELOR' }
   ], [counsellor]);
 
   const activeContact = contacts.find(c => c._id?.toString() === contactId);
 
   useEffect(() => {
-    if (!contactId || contactId === 'support_staff') {
-        if (contactId === 'support_staff') {
-            setMessages([{ _id: '1', senderName: 'Support Staff', text: 'Hello! This is a secure administrative support line. How can we help you today?', createdAt: new Date().toISOString(), read: true }]);
-            setLoading(false);
-        }
-        return;
-    }
+    if (!contactId) return;
 
     setLoading(true);
     socket.emit('dm:join', contactId);
@@ -172,11 +165,6 @@ const StudentMessageInterface = ({ counsellor, onClose, currentUserId }) => {
   const send = (e) => {
     e.preventDefault();
     if (!input.trim() || sending) return;
-    if (contactId === 'support_staff') {
-        setMessages(p => [...p, { _id: Date.now().toString(), senderId: currentUserId, senderName: 'You', text: input.trim(), createdAt: new Date().toISOString() }]);
-        setInput('');
-        return;
-    }
     const text = input.trim();
     setInput('');
     setSending(true);
@@ -210,7 +198,7 @@ const StudentMessageInterface = ({ counsellor, onClose, currentUserId }) => {
                  <div key={c._id} className={`cm-thread ${c._id.toString() === contactId ? 'cm-thread-active' : ''}`} onClick={() => setContactId(c._id.toString())} style={{ padding: '0.75rem', borderRadius: '10px', display: 'flex', gap: '0.75rem', cursor: 'pointer', marginBottom: '0.25rem' }}>
                     <div className="cm-thread-avatar-wrap" style={{ position: 'relative' }}>
                         <img src={c.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.name)}&background=f1f5f9`} style={{ width: '42px', height: '42px', borderRadius: '10px' }} />
-                        {c._id !== 'support_staff' && <span className="cm-status-indicator cm-status-online" style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '12px', height: '12px', background: '#22c55e', border: '2px solid #fff', borderRadius: '50%' }} />}
+                        <span className="cm-status-indicator cm-status-online" style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '12px', height: '12px', background: '#22c55e', border: '2px solid #fff', borderRadius: '50%' }} />
                     </div>
                     <div>
                         <div style={{fontSize: '0.9rem', fontWeight: 700, color: '#1a2234'}}>{c.name}</div>
@@ -233,7 +221,7 @@ const StudentMessageInterface = ({ counsellor, onClose, currentUserId }) => {
           <div style={{ flex: 1 }}>
             <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1a2234' }}>{activeContact?.name}</h3>
             <div style={{ fontSize: '0.75rem', color: '#22c55e', fontWeight: 700 }}>
-                {activeContact?._id !== 'support_staff' ? <>• ONLINE NOW</> : <>MANAGED SUPPORT</>}
+                <>• ONLINE NOW</>
                 {typing && <span style={{ color: '#94a3b8', fontWeight: 500 }}> · typing…</span>}
             </div>
           </div>
@@ -282,7 +270,7 @@ const StudentMessageInterface = ({ counsellor, onClose, currentUserId }) => {
               value={input}
               onChange={(e) => {
                 setInput(e.target.value);
-                if (contactId !== 'support_staff') socket.emit('dm:typing', { toUserId: contactId, isTyping: true });
+                socket.emit('dm:typing', { toUserId: contactId, isTyping: true });
               }}
             />
             <button type="submit" disabled={!input.trim() || sending} style={{ background: '#1a2234', color: '#fff', border: 'none', borderRadius: '8px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Send size={18} /></button>

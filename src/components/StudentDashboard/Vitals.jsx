@@ -73,6 +73,7 @@
 
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getMoodStats } from '../../api/moodApi';
 import './Vitals.css';
 
@@ -126,7 +127,7 @@ const Vitals = () => {
         <section className="vitals-section">
             <div className="vitals-header">
                 <h2 className="section-title">HEALTH VITALS</h2>
-                <a href="#history" className="history-link">History</a>
+                <Link to="/dashboard/analytics" className="history-link">History</Link>
             </div>
 
             <div className="vitals-grid">
