@@ -1,3 +1,5 @@
+import { api } from './authApi';
+
 // POST /api/journal  — { title, body, prompt?, tags? }
 export const createJournalEntry = (data) => api.post('/journal', data);
 

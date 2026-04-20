@@ -128,6 +128,8 @@ const JournalingEditor = () => {
 
   const toastTimerRef = useRef(null);
 
+  const mountedRef = useRef(true);
+
   // Timestamps for display
   const [createdAt, setCreatedAt] = useState(null);
   const [updatedAt, setUpdatedAt] = useState(null);
@@ -136,7 +138,10 @@ const JournalingEditor = () => {
 
   // ── Cleanup toast timer on unmount ──
   useEffect(() => {
-    return () => clearTimeout(toastTimerRef.current);
+    return () => {
+      clearTimeout(toastTimerRef.current);
+      mountedRef.current = false;
+    };
   }, []);
 
   // ── Show toast when approaching or hitting the char limit ──
@@ -204,9 +209,9 @@ const JournalingEditor = () => {
       // Redirect to journaling home after save
       navigate('/dashboard/journaling', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || 'Save failed.');
+      setError(err.response?.data?.message || err.message || 'Save failed.');
     } finally {
-      setSaving(false);
+      if (mountedRef.current) setSaving(false);
     }
   };
 
