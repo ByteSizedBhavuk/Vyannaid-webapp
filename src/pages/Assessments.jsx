@@ -55,54 +55,36 @@ const Assessments = () => {
       id: 1,
       icon: <Brain size={20} strokeWidth={2.5} color="#475569" />,
       tag: 'CLINICAL',
-      title: 'Anxiety Inventory',
-      desc: 'Standardized self-report measure for quantifying clinical anxiety symptoms in academic settings.',
-      time: '15 MINS'
+      title: 'GAD-7 (Generalized Anxiety Disorder)',
+      desc: 'A 7-item self-report questionnaire designed to screen for generalized anxiety disorder.',
+      time: '5 min'
     },
     {
       id: 2,
-      icon: <Brain size={20} strokeWidth={2.5} color="#475569" />,
-      tag: 'APTITUDE',
-      title: 'Cognitive Aptitude',
-      desc: 'Evaluating logical reasoning, spatial awareness, and problem-solving capacities.',
-      time: '45 MINS'
+      icon: <Smile size={20} strokeWidth={2.5} color="#475569" />,
+      tag: 'CLINICAL',
+      title: 'PSS-10 (Perceived Stress Scale)',
+      desc: 'A self report questionaire designed to measure the perception of stress.',
+      time: '5 MINS'
     },
     {
       id: 3,
-      icon: <Smile size={20} strokeWidth={2.5} color="#475569" />,
-      tag: 'SOFT SKILLS',
-      title: 'Emotional Intelligence',
-      desc: 'Measuring self-awareness, social regulation, and empathy markers in adolescent students.',
-      time: '25 MINS'
+      icon: <Brain size={20} strokeWidth={2.5} color="#475569" />,
+      tag: 'CLINICAL',
+      title: 'PHQ-9 (Patient Health Questionnaire)',
+      desc: 'A self administrated diagnostic tool used to screen, diagnose and measure the severenity of depression.',
+      time: '7 min'
     },
     {
       id: 4,
       icon: <ImageIcon size={20} strokeWidth={2.5} color="#475569" />,
-      tag: 'PROJECTIVE',
-      title: 'Visual Association',
-      desc: 'Qualitative assessment focusing on pattern recognition and subconscious bias indicators.',
-      time: '20 MINS'
+      tag: 'CLINICAL',
+      title: 'DASS-21 (Depression, Anxiety and Stress Scale)',
+      desc: 'Self reprt questionaire designed to measure the severenity of emotional distress.',
+      time: '10 MINS'
     }
   ];
 
-  const ASSIGNED = [
-    {
-      id: 1,
-      name: 'Julian Casablancas',
-      test: 'Cognitive Aptitude Test',
-      progress: 65,
-      status: 'Due Tomorrow',
-      patientId: '#4092'
-    },
-    {
-      id: 2,
-      name: 'Maya Arulpragasam',
-      test: 'Anxiety Inventory (BAI)',
-      progress: 12,
-      status: 'Started Today',
-      patientId: '#3991'
-    }
-  ];
 
   return (
     <Layout>
@@ -110,22 +92,22 @@ const Assessments = () => {
         {/* Navigation Row */}
         <div className="ca-top-nav">
           <div className="ca-nav-links">
-            <span className="ca-nav-label">NAVIGATION</span>
-            <button 
+
+            <button
               className={`ca-nav-btn ${activeTab === 'All Tests' ? 'active' : ''}`}
               onClick={() => setActiveTab('All Tests')}
             >
               All Tests
             </button>
             {!isStudent && (
-              <button 
+              <button
                 className={`ca-nav-btn ${activeTab === 'Assigned' ? 'active' : ''}`}
                 onClick={() => setActiveTab('Assigned')}
               >
                 Assigned
               </button>
             )}
-            <button 
+            <button
               className={`ca-nav-btn ${activeTab === 'Results' ? 'active' : ''}`}
               onClick={() => setActiveTab('Results')}
             >

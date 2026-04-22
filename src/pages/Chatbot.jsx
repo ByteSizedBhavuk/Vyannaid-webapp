@@ -142,11 +142,7 @@ const Chatbot = () => {
                 <div className="chat-content">
                     {messages.length === 0 ? (
                         <div className="empty-state">
-                            <div className="aariv-large-icon">
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#3B82F6"/>
-                                </svg>
-                            </div>
+
                             <h3>Hello! I'm Aariv.</h3>
                             <p>How can I assist you with your mental well-being today?</p>
                         </div>
@@ -154,13 +150,7 @@ const Chatbot = () => {
                         <div className="messages-list">
                             {messages.map((msg, index) => (
                                 <div key={index} className={`message-wrapper ${msg.sender}`}>
-                                    {msg.sender === "aariv" && (
-                                        <div className="aariv-avatar-mini">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white"/>
-                                            </svg>
-                                        </div>
-                                    )}
+
                                     <div className="message-content">
                                         <div className="message-info">
                                             <span className="sender-name">{msg.sender === "aariv" ? "Aariv" : "You"}</span>
@@ -195,11 +185,7 @@ const Chatbot = () => {
                             ))}
                             {isLoading && (
                                 <div className="message-wrapper aariv">
-                                    <div className="aariv-avatar-mini">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white"/>
-                                        </svg>
-                                    </div>
+
                                     <div className="message-content">
                                         <div className="message-bubble">
                                             <span className="loading-dots">Aariv is thinking...</span>

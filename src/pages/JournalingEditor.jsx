@@ -65,6 +65,8 @@ const TagInput = ({ tags, onChange }) => {
               </button>
             ) : (
               <input
+                id="je-tag-field"
+                name="journalTags"
                 ref={inputRef}
                 className="je-tag-field"
                 placeholder="type and press enter..."
@@ -125,6 +127,7 @@ const JournalingEditor = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(isEdit);
   const [toast, setToast] = useState(null); // { type: 'warn' | 'limit', msg: string }
+  const [syncStatus, setSyncStatus] = useState(null); // 'pending' | 'processing' | 'completed' | 'failed'
 
   const toastTimerRef = useRef(null);
 
@@ -178,10 +181,29 @@ const JournalingEditor = () => {
         setTags(e.tags || []);
         setCreatedAt(e.createdAt);
         setUpdatedAt(e.updatedAt);
+        setSyncStatus(e.embeddingDetails?.status || null);
       })
       .catch(() => setError('Could not load entry.'))
       .finally(() => setLoading(false));
   }, [id, isEdit]);
+
+  // ── Poll for sync status if pending or processing ──
+  useEffect(() => {
+    if (!id || (syncStatus !== 'pending' && syncStatus !== 'processing')) return;
+
+    const poll = setInterval(async () => {
+      try {
+        const res = await getJournalEntry(id);
+        const status = res.data.data.embeddingDetails?.status;
+        if (status) setSyncStatus(status);
+        if (status === 'completed' || status === 'failed') clearInterval(poll);
+      } catch (err) {
+        clearInterval(poll);
+      }
+    }, 3000);
+
+    return () => clearInterval(poll);
+  }, [id, syncStatus]);
 
 
 
@@ -264,6 +286,12 @@ const JournalingEditor = () => {
               {updatedAt && updatedAt !== createdAt && (
                 <span className="je-edited-dot" title={`Edited ${new Date(updatedAt).toLocaleDateString()}`}></span>
               )}
+              {syncStatus && (
+                <div className={`je-sync-badge status-${syncStatus}`}>
+                  <div className="je-sync-dot"></div>
+                  <span>{syncStatus === 'completed' ? 'AI Synced' : syncStatus === 'failed' ? 'Sync Failed' : 'Syncing to AI...'}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -286,6 +314,8 @@ const JournalingEditor = () => {
         {/* ── Writing Area ── */}
         <div className="je-writing-container">
           <input
+            id="je-title-input"
+            name="journalTitle"
             className="je-title-input"
             placeholder="Give your thoughts a title…"
             value={title}
@@ -306,6 +336,8 @@ const JournalingEditor = () => {
           )}
 
           <textarea
+            id="je-body-textarea"
+            name="journalBody"
             ref={bodyRef}
             className={`je-body-textarea ${body.length >= CHAR_LIMIT ? 'at-limit' : ''}`}
             placeholder="Start writing here. This space is just for you…"
