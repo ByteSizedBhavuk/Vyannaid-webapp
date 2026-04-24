@@ -1,15 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.REACT_APP_API_URL || "";
-
+const BASE_URL = import.meta.env.VITE_API_URL;
 // Shared axios instance — all requests get the Bearer token automatically
 export const api = axios.create({
-  baseURL: BASE_URL + "/api",
+  baseURL: `${BASE_URL}/api`,
   headers: {
     "Content-Type": "application/json",
-    // Tells ngrok free tier to skip its browser warning interstitial page.
-    // Safe to include always — non-ngrok servers ignore unknown headers.
-    "ngrok-skip-browser-warning": "true",
   },
 });
 
