@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-import { api } from './authApi';
-=======
 import { api } from "./authApi";
->>>>>>> Stashed changes
 
 // POST /api/journal  — { title, body, prompt?, tags? }
 export const createJournalEntry = (data) => api.post('/journal', data);
