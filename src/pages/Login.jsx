@@ -83,7 +83,18 @@ const Login = () => {
           </button>
         </div>
 
-        <button type="submit" disabled={loading}>
+        // Add Google login button
+        <button
+          type="button"
+          className="google-login"
+          onClick={() => {
+            // Redirect to backend Google OAuth endpoint
+            window.location.href = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/api/auth/google`;
+          }}
+          disabled={loading}
+        >
+          Sign in with Google
+        </button>
           {loading ? "Logging in…" : "Login"}
         </button>
 
